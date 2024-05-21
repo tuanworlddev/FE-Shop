@@ -7,4 +7,11 @@
     <string name="create_account">Create Account</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="notifications">Notifications</string>
+    <string name="orders">Orders</string>
+    <string name="categories">Categories</string>
+    <string name="search">Search</string>
+    <string name="top_selling">Top Selling</string>
+    <string name="see_all">See All</string>
+    <string name="new_in">New In</string>
 </resources>

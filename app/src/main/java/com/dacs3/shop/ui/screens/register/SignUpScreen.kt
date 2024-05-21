@@ -1,5 +1,6 @@
 package com.dacs3.shop.ui.screens.register
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dacs3.shop.R
+import com.dacs3.shop.component.AlertDialogNotification
 import com.dacs3.shop.component.ButtonLoginSocial
 import com.dacs3.shop.component.ButtonPrimary
 import com.dacs3.shop.component.CustomPasswordField
@@ -40,11 +43,24 @@ import com.dacs3.shop.ui.theme.Black100
 fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewModel = hiltViewModel()) {
     val uiState by signUpViewModel.signUpUiState.collectAsState()
 
+    if (uiState.signUpSuccess) {
+        navController.navigate("login")
+    }
+
+    if (uiState.errorMessage != null) {
+        AlertDialogNotification(
+            onDismissRequest = { signUpViewModel.onErrorMessageChange(null) },
+            dialogTitle = "System error",
+            dialogText = uiState.errorMessage!!
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(8.dp)
+            .padding(24.dp)
+            .background(Color.White)
     ) {
         Text(
             text = stringResource(id = R.string.create_account),
@@ -89,7 +105,17 @@ fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewMo
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        ButtonPrimary(onClick = { signUpViewModel.signUp() }, text = stringResource(id = R.string.sign_up))
+        ButtonPrimary(
+            onClick = {
+                try {
+                    signUpViewModel.signUp()
+                } catch (e: Exception) {
+                    signUpViewModel.onErrorMessageChange(e.message)
+                }
+                      },
+            text = stringResource(id = R.string.sign_up),
+            enabled = !uiState.isLoading
+        )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -80,9 +81,17 @@ dependencies {
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    // Hilt ViewModel
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     //ViewModel Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    //Data storage
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-storage")
 }
 
 kapt {

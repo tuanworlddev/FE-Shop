@@ -13,4 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 val Black100 = Color(0xFF272727)
 val Black50 = Color(0x80000000)
 val Primary100 = Color(0xFF8E6CEF)
+val Primary50 = Color(0x808E6CEF)
 val Light2 = Color(0xFFF4F4F4)
+
+val Warning = Color(0xFFF7BB09)

@@ -26,11 +26,13 @@ import com.dacs3.shop.R
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Light2
 import com.dacs3.shop.ui.theme.Primary100
+import com.dacs3.shop.ui.theme.Primary50
 
 @Composable
 fun ButtonPrimary(
     onClick: () -> Unit,
-    text: String
+    text: String,
+    enabled: Boolean = true
 ) {
     Button(
         onClick = { onClick() },
@@ -38,21 +40,14 @@ fun ButtonPrimary(
             .fillMaxWidth()
             .height(49.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Primary100
+            containerColor = Primary100,
+            disabledContainerColor = Primary50
         ),
-        shape = RoundedCornerShape(100.dp)
+        shape = RoundedCornerShape(100.dp),
+        enabled = enabled
     ) {
         Text(text = text)
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CustomButtonPreview() {
-    ButtonPrimary(
-        onClick = { /*TODO*/ },
-        text = "Continue"
-    )
 }
 
 @Composable
@@ -82,14 +77,4 @@ fun ButtonLoginSocial(
             color = Black100
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ButtonLoginSocialPreview() {
-    ButtonLoginSocial(
-        onClick = {},
-        icon = R.drawable.ic_google,
-        text = "Continue With Google"
-    )
 }

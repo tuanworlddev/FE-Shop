@@ -32,6 +32,10 @@ class SignUpViewModel @Inject constructor(private val userRepository: UserReposi
         _signUpUiState.value = _signUpUiState.value.copy(password = password, passwordError = null)
     }
 
+    fun onErrorMessageChange(errorMessage: String?) {
+        _signUpUiState.value = _signUpUiState.value.copy(errorMessage = errorMessage)
+    }
+
     fun signUp() {
         viewModelScope.launch {
             val currentState = _signUpUiState.value
@@ -76,9 +80,10 @@ class SignUpViewModel @Inject constructor(private val userRepository: UserReposi
                     passwordError = passwordError
                 )
             } else {
+                _signUpUiState.value = currentState.copy(signUpSuccess = false, isLoading = true)
                 val response = userRepository.addUser(User(firstName = currentState.firstName, lastName = currentState.lastName, email = currentState.email, password = currentState.password))
                 if (response.isSuccessful) {
-
+                    _signUpUiState.value = currentState.copy(signUpSuccess = true, isLoading = false)
                 }
             }
         }

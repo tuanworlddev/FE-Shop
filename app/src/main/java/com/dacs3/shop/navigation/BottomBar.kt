@@ -2,6 +2,7 @@ package com.dacs3.shop.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -16,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Primary100
@@ -25,7 +28,8 @@ import com.dacs3.shop.ui.theme.Primary100
 fun BottomBarContainer(navController: NavHostController) {
     NavigationBar(
         containerColor = Color.White,
-        contentColor = Color.White
+        contentColor = Color.White,
+        modifier = Modifier.height(70.dp)
     ) {
         var navSelected by remember {
             mutableIntStateOf(0)
@@ -35,7 +39,13 @@ fun BottomBarContainer(navController: NavHostController) {
                 selected = navSelected == index,
                 onClick = {
                     navSelected = index
-                    navController.navigate(navItem.route)
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 icon = {
                     Icon(
@@ -45,7 +55,7 @@ fun BottomBarContainer(navController: NavHostController) {
                     )
                 },
                 label = { Text(text = navItem.title) },
-                alwaysShowLabel = true,
+                alwaysShowLabel = false,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Primary100,
                     selectedTextColor = Primary100,
