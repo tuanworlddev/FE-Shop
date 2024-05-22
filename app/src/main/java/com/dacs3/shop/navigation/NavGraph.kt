@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -22,226 +24,88 @@ import com.dacs3.shop.ui.screens.product.management.ProductManageScreen
 import com.dacs3.shop.ui.screens.register.SignUpScreen
 
 @Composable
-fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostController) {
+fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostController, bottomBarState: MutableState<Boolean>) {
     NavHost(
         navController = navController,
         startDestination = "home",
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(
-            route = "home",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "home"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = true
+            }
             HomeScreen(navController)
         }
         composable(
-            route = "notification",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "notification"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = true
+            }
             NotificationScreen(navController)
         }
         composable(
-            route = "order",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "order"
         ) {
-            OrderScreen(navController)
+            LaunchedEffect(Unit) {
+                bottomBarState.value = true
+            }
+            OrderScreen(navController = navController)
         }
         composable(
-            route = "account",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "account"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = true
+            }
             AccountScreen(navController = navController)
         }
         composable(
-            route = "login",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "login"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             LoginScreen(navController)
         }
         composable("signup") {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             SignUpScreen(navController)
         }
         composable(
-            route = "categories",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "categories"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             CategoryScreen(navController)
         }
         composable(
             route = "category-details/{categoryId}"
         ) { backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             CategoryDetailsScreen(categoryId = backStackEntry.arguments?.getString("categoryId"), navController)
         }
         composable(
             route = "product-details/{productId}"
         ) { backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             ProductDetailsScreen(productId = backStackEntry.arguments?.getString("productId"), navController)
         }
         composable(
-            route = "product-management",
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(500)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(500)
-                )
-            }
+            route = "product-management"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             ProductManageScreen(navHostController = navController)
         }
     }

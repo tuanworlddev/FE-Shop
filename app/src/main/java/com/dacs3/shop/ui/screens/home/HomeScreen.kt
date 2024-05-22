@@ -51,6 +51,7 @@ import com.dacs3.shop.model.Category
 import com.dacs3.shop.model.Product
 import com.dacs3.shop.ui.screens.loading.LoadingScreen
 import com.dacs3.shop.ui.theme.Black100
+import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Light2
 import com.dacs3.shop.ui.theme.Primary100
 
@@ -171,7 +172,7 @@ fun SearchBarButton() {
 }
 
 @Composable
-fun HomeCategory(categories: List<Category>, navController: NavHostController) {
+fun HomeCategory(categories: List<Category>?, navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -182,50 +183,62 @@ fun HomeCategory(categories: List<Category>, navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
-            categories.forEach { category ->
-                HomeCategoryCard(category, navController)
-                Spacer(modifier = Modifier.width(10.dp))
+            if (categories.isNullOrEmpty()) {
+                Text(text = "Category Not Found", color = Black50)
+            } else {
+                categories.forEach { category ->
+                    HomeCategoryCard(category, navController)
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
             }
         }
     }
 }
 
 @Composable
-fun HomeTopSelling(saleProducts: List<Product>, navController: NavHostController) {
+fun HomeTopSelling(saleProducts: List<Product>?, navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState())
-        ) {
-            saleProducts.forEach { product ->
-                ProductCard(product, navController)
-                Spacer(modifier = Modifier.width(15.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun HomeNewIn(products: List<Product>, navController: NavHostController) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        val productList = products.chunked(2)
-        productList.forEach { product2 ->
+        if (saleProducts.isNullOrEmpty()) {
+            Text(text = "Sale Products Not Found", color = Black50)
+        } else {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.horizontalScroll(rememberScrollState())
             ) {
-                product2.forEach { product ->
-                    ProductCard(product = product, navHostController = navController)
-                }
-                if (product2.size < 2) {
-                    Spacer(modifier = Modifier.weight(1f))
+                saleProducts.forEach { product ->
+                    ProductCard(product, navController)
+                    Spacer(modifier = Modifier.width(15.dp))
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun HomeNewIn(products: List<Product>?, navController: NavHostController) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (products.isNullOrEmpty()) {
+            Text(text = "New Products Not Found", color = Black50)
+        } else {
+            val productList = products.chunked(2)
+            productList.forEach { product2 ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    product2.forEach { product ->
+                        ProductCard(product = product, navHostController = navController)
+                    }
+                    if (product2.size < 2) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }

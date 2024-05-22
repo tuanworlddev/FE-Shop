@@ -10,6 +10,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +35,7 @@ class HomeViewModel @Inject constructor(
                     val products = productsResponse.body()!!
                     val (saleProducts, newProducts) = products.partition { it.sale!! > 0 }
 
-                    _homeUiState.value = HomeUiState(
+                    _homeUiState.value = _homeUiState.value.copy(
                         saleProducts = saleProducts,
                         newProducts = newProducts,
                         categories = categoriesResponse.body()!!,
