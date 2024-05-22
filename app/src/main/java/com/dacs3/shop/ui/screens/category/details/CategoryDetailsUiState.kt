@@ -5,7 +5,7 @@ import com.dacs3.shop.model.Product
 
 data class CategoryDetailsUiState(
     val category: Category? = null,
-    val products: List<Product> = listOf(),
+    val products: List<Product>? = null,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

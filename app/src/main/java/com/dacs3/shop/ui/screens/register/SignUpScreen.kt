@@ -72,19 +72,19 @@ fun SignUpScreen(navController: NavHostController, signUpViewModel: SignUpViewMo
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        CustomTextField(value = uiState.firstName, onValueChange = { signUpViewModel.onFirstNameChange(it) }, placeholder = stringResource(id = R.string.first_name), errorMessage = uiState.firstNameError)
+        CustomTextField(value = uiState.firstName, onValueChange = { signUpViewModel.onFirstNameChange(it) }, placeholder = stringResource(id = R.string.first_name), errorMessage = uiState.firstNameError, enabled = !uiState.isLoading)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomTextField(value = uiState.lastName, onValueChange = { signUpViewModel.onLastNameChange(it) }, placeholder = stringResource(id = R.string.last_name), errorMessage = uiState.lastNameError)
+        CustomTextField(value = uiState.lastName, onValueChange = { signUpViewModel.onLastNameChange(it) }, placeholder = stringResource(id = R.string.last_name), errorMessage = uiState.lastNameError, enabled = !uiState.isLoading)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomTextField(value = uiState.email, onValueChange = { signUpViewModel.onEmailChange(it) }, placeholder = stringResource(id = R.string.email_address), errorMessage = uiState.emailError)
+        CustomTextField(value = uiState.email, onValueChange = { signUpViewModel.onEmailChange(it) }, placeholder = stringResource(id = R.string.email_address), errorMessage = uiState.emailError, enabled = !uiState.isLoading)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomPasswordField(value = uiState.password, onValueChange = { signUpViewModel.onPasswordChange(it) }, placeholder = stringResource(id = R.string.password), errorMessage = uiState.passwordError)
+        CustomPasswordField(value = uiState.password, onValueChange = { signUpViewModel.onPasswordChange(it) }, placeholder = stringResource(id = R.string.password), errorMessage = uiState.passwordError, enabled = !uiState.isLoading)
 
         Row(
             modifier = Modifier.fillMaxWidth(),

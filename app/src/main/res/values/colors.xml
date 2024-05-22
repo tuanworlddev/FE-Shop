@@ -12,4 +12,8 @@
     <color name="red_border">#ebccd1</color>
     <color name="red_text">#a94442</color>
     <color name="black_555">#555</color>
+    <color name="gray">#F4F4F4</color>
+    <color name="purple">#8E6CEF</color>
+    <color name="placeholder">#9B9B9B</color>
+    <color name="textGray">#8E8E8E</color>
 </resources>

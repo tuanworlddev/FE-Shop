@@ -4,8 +4,8 @@ import com.dacs3.shop.model.Category
 import com.dacs3.shop.model.Product
 
 data class HomeUiState(
-    val categories: List<Category> = listOf(),
-    val newProducts: List<Product> = listOf(),
-    val saleProducts: List<Product> = listOf(),
+    val categories: List<Category>? = null,
+    val newProducts: List<Product>? = null,
+    val saleProducts: List<Product>? = null,
     val isLoading: Boolean = false
 )

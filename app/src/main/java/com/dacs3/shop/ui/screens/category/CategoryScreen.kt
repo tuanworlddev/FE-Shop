@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.dacs3.shop.R
 import com.dacs3.shop.component.CardLinkItem
+import com.dacs3.shop.component.CustomTopBar
 import com.dacs3.shop.ui.screens.loading.LoadingScreen
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.theme.Black100
@@ -51,6 +52,8 @@ fun CategoryScreen(navController: NavHostController, categoryViewModel: Category
         Column(
             modifier = Modifier.background(Color.White)
         ) {
+            CustomTopBar(navController)
+            Spacer(modifier = Modifier.height(15.dp))
             Text(
                 text = stringResource(id = R.string.categories),
                 fontSize = 24.sp,

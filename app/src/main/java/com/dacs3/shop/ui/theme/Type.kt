@@ -2,9 +2,12 @@ package com.dacs3.shop.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.dacs3.shop.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -31,4 +34,11 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+
+
+val circularFont = FontFamily(
+    Font(R.font.circularstdblack, FontWeight.Black),
+    Font(R.font.circularstdmedium, FontWeight.Normal),
+    Font(R.font.circularstdbook, FontWeight.Light)
 )
