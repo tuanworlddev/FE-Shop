@@ -1,6 +1,7 @@
 package com.dacs3.shop.ui.screens.home
 
 import com.dacs3.shop.model.Category
+import com.dacs3.shop.model.Product
 
 data class HomeUiState(
     val categories: List<Category>? = null,

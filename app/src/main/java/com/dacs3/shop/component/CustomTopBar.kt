@@ -39,7 +39,5 @@ fun CustomTopBar(navController: NavHostController, popBackStackState: Boolean = 
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "", modifier = Modifier.size(16.dp))
             }
         }
-
     }
-
 }

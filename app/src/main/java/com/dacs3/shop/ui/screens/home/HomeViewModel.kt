@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
 
                 if (categoriesResponse.isSuccessful && productsResponse.isSuccessful) {
                     val products = productsResponse.body()!!
-                    val (saleProducts, newProducts) = products.partition { it.sale!! > 0 }
+                    val (saleProducts, newProducts) = products.partition { it.variants.first().sale > 0 }
 
                     _homeUiState.value = _homeUiState.value.copy(
                         saleProducts = saleProducts,

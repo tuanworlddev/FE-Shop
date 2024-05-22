@@ -27,7 +27,8 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    enabled: Boolean = true
 ) {
     Column {
         TextField(
@@ -44,13 +45,15 @@ fun CustomTextField(
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Black50,
+                disabledTextColor = Black50,
                 focusedContainerColor = Light2,
                 unfocusedContainerColor = Light2,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 cursorColor = Color.Black
             ),
-            isError = errorMessage != null
+            isError = errorMessage != null,
+            enabled = enabled
         )
         if (errorMessage != null) {
             Text(
@@ -67,7 +70,8 @@ fun CustomPasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    enabled: Boolean = true
 ) {
     Column {
         TextField(
@@ -84,6 +88,7 @@ fun CustomPasswordField(
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Black50,
+                disabledTextColor = Black50,
                 focusedContainerColor = Light2,
                 unfocusedContainerColor = Light2,
                 focusedIndicatorColor = Color.Transparent,
@@ -95,7 +100,8 @@ fun CustomPasswordField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
-            )
+            ),
+            enabled = enabled
         )
         if (errorMessage != null) {
             Text(
