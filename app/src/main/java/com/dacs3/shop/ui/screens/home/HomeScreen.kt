@@ -48,7 +48,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.dacs3.shop.R
 import com.dacs3.shop.component.ProductCard
 import com.dacs3.shop.model.Category
-import com.dacs3.shop.model.Product
 import com.dacs3.shop.ui.screens.loading.LoadingScreen
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Black50

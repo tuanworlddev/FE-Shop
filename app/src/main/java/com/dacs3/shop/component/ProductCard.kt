@@ -40,7 +40,7 @@ import java.math.BigDecimal
 
 @Composable
 fun ProductCard(product: Product, navHostController: NavHostController) {
-    val price = product.price ?: BigDecimal.ZERO
+    val price = product.variants. ?: BigDecimal.ZERO
     val sale: Float = product.sale ?: 0f
 
     Column(

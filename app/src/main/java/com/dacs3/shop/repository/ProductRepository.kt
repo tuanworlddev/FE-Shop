@@ -1,6 +1,5 @@
 package com.dacs3.shop.repository
 
-import com.dacs3.shop.model.Product
 import com.dacs3.shop.network.ProductService
 import javax.inject.Inject
 
