@@ -72,11 +72,11 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomTextField(value = uiState.email, onValueChange = { loginViewModel.onEmailChange(it) }, placeholder = stringResource(id = R.string.email_address), errorMessage = uiState.emailError)
+        CustomTextField(value = uiState.email, onValueChange = { loginViewModel.onEmailChange(it) }, label = stringResource(id = R.string.email_address), errorMessage = uiState.emailError)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        CustomPasswordField(value = uiState.password, onValueChange = { loginViewModel.onPasswordChange(it) }, placeholder = stringResource(id = R.string.password), errorMessage = uiState.passwordError)
+        CustomPasswordField(value = uiState.password, onValueChange = { loginViewModel.onPasswordChange(it) }, label = stringResource(id = R.string.password), errorMessage = uiState.passwordError)
 
         Spacer(modifier = Modifier.height(20.dp))
 

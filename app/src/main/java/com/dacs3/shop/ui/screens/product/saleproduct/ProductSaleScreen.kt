@@ -1,4 +1,4 @@
-package com.dacs3.shop.ui.screens.category.details
+package com.dacs3.shop.ui.screens.product.saleproduct
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.dacs3.shop.component.ErrorScreen
 import com.dacs3.shop.ui.screens.home.HomeNewIn
 import com.dacs3.shop.ui.screens.loading.LoadingScreen
 import com.dacs3.shop.ui.theme.Black100
@@ -40,21 +39,13 @@ import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Light2
 
 @Composable
-fun CategoryDetailsScreen(categoryId: String?, navController: NavHostController, categoryDetailsViewModel: CategoryDetailsViewModel = hiltViewModel()) {
-    val uiState by categoryDetailsViewModel.categoryDetailsUiState.collectAsState()
+fun ProductSaleScreen(navController: NavHostController, productSaleViewModel: ProductSaleViewModel = hiltViewModel()) {
+    val uiState by productSaleViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        categoryDetailsViewModel.loadData(categoryId!!)
+        productSaleViewModel.loadProduct()
     }
 
-    when {
-        uiState.isLoading -> LoadingScreen()
-        else -> CategoryDetailsContent(uiState, navController)
-    }
-}
-
-@Composable
-fun CategoryDetailsContent(uiState: CategoryDetailsUiState, navController: NavHostController) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +83,7 @@ fun CategoryDetailsContent(uiState: CategoryDetailsUiState, navController: NavHo
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(
-                text = "${uiState.category?.name} (${uiState.products?.size})",
+                text = "Top Selling",
                 fontSize = 16.sp,
                 fontWeight = FontWeight(700),
                 color = Black100
@@ -100,15 +91,19 @@ fun CategoryDetailsContent(uiState: CategoryDetailsUiState, navController: NavHo
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            if (uiState.products.isNullOrEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Product Not Found", color = Black50)
-                }
+            if (uiState.isLoading) {
+                LoadingScreen()
             } else {
-                HomeNewIn(products = uiState.products, navController = navController)
+                if (uiState.products.isNullOrEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Product Not Found", color = Black50)
+                    }
+                } else {
+                    HomeNewIn(products = uiState.products, navController = navController)
+                }
             }
         }
     }

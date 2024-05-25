@@ -19,8 +19,11 @@ import com.dacs3.shop.ui.screens.home.HomeScreen
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.screens.notification.NotificationScreen
 import com.dacs3.shop.ui.screens.order.OrderScreen
+import com.dacs3.shop.ui.screens.product.create.CreateProductScreen
 import com.dacs3.shop.ui.screens.product.details.ProductDetailsScreen
 import com.dacs3.shop.ui.screens.product.management.ProductManageScreen
+import com.dacs3.shop.ui.screens.product.newproduct.ProductNewScreen
+import com.dacs3.shop.ui.screens.product.saleproduct.ProductSaleScreen
 import com.dacs3.shop.ui.screens.register.SignUpScreen
 
 @Composable
@@ -107,6 +110,39 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
                 bottomBarState.value = false
             }
             ProductManageScreen(navHostController = navController)
+        }
+        composable(
+            route = "product-sale"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            ProductSaleScreen(navController = navController)
+        }
+        composable(
+            route = "product-new"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            ProductNewScreen(navController = navController)
+        }
+        composable(
+            route = "create-product",
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(500)
+                )
+            }
+        ) {
+            CreateProductScreen(navController = navController)
         }
     }
 }

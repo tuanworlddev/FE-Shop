@@ -5,6 +5,7 @@ import com.dacs3.shop.network.AuthService
 import com.dacs3.shop.network.CategoryService
 import com.dacs3.shop.network.ProductService
 import com.dacs3.shop.network.UserService
+import com.dacs3.shop.network.VariantService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +31,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.10:8080/")
+            .baseUrl("http://192.168.1.2:8080/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -58,5 +59,11 @@ object NetworkModule {
     @Singleton
     fun provideProductService(retrofit: Retrofit): ProductService {
         return retrofit.create(ProductService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVariantService(retrofit: Retrofit): VariantService {
+        return retrofit.create(VariantService::class.java)
     }
 }

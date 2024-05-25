@@ -58,122 +58,127 @@ import java.math.BigDecimal
 
 @Composable
 fun ProductCard(product: Product, navHostController: NavHostController) {
-    val price = product.variants.first().price
-    val sale: Double = product.variants.first().sale
-    var isLoading by remember { mutableStateOf(true) }
+    val firstVariant = product.variants.firstOrNull()
+    if (firstVariant != null) {
+        val price = firstVariant.price
+        val sale: Double = firstVariant.sale
+        var isLoading by remember { mutableStateOf(true) }
 
-    Column(
-        modifier = Modifier
-            .size(width = 159.dp, height = 281.dp)
-            .background(color = Light2, shape = RoundedCornerShape(8.dp))
-            .clickable(enabled = !isLoading) {
-                navHostController.navigate("product-details/${product.id}")
-            }
-    ) {
-        Box(
-            contentAlignment = Alignment.TopCenter
-        ) {
-            SubcomposeAsyncImage(
-                model = product.images.first().url,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
-            ) {
-                val state = painter.state
-                if (state is AsyncImagePainter.State.Success) {
-                    isLoading = false
-                    SubcomposeAsyncImageContent()
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(220.dp)
-                            .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            .shimmerEffect()
-                    )
+        Column(
+            modifier = Modifier
+                .size(width = 159.dp, height = 281.dp)
+                .background(color = Light2, shape = RoundedCornerShape(8.dp))
+                .clickable(enabled = !isLoading) {
+                    navHostController.navigate("product-details/${product.id}")
                 }
-            }
-            if (!isLoading) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Box(
+                contentAlignment = Alignment.TopCenter
+            ) {
+                SubcomposeAsyncImage(
+                    model = product.images.first().url,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
                 ) {
-                    Image(
-                        painter = if (sale > 0) painterResource(id = R.drawable.product_sale) else painterResource(id = R.drawable.product_new),
-                        contentDescription = null
-                    )
-                    IconButton(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier.size(24.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.FavoriteBorder,
-                            contentDescription = "",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
+                    val state = painter.state
+                    if (state is AsyncImagePainter.State.Success) {
+                        isLoading = false
+                        SubcomposeAsyncImageContent()
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(220.dp)
+                                .clip(shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                                .shimmerEffect()
                         )
                     }
                 }
-            }
-        }
-        if (isLoading) {
-            Box(modifier = Modifier.padding(4.dp)) {
-                Column {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(15.dp)
-                            .shimmerEffect()
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(15.dp)
-                            .shimmerEffect()
-                    )
+                if (!isLoading) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Image(
+                            painter = if (sale > 0) painterResource(id = R.drawable.product_sale) else painterResource(id = R.drawable.product_new),
+                            contentDescription = null
+                        )
+                        IconButton(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.FavoriteBorder,
+                                contentDescription = "",
+                                tint = Color.White,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
                 }
             }
-        } else {
-            Column(modifier = Modifier.padding(4.dp)) {
-                Text(
-                    text = product.name,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight(450),
-                    color = Black100,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    if (sale > 0f) {
-                        Text(
-                            text = "$${"%.2f".format(price.toFloat() * (1 - sale / 100))}",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Black100
+            if (isLoading) {
+                Box(modifier = Modifier.padding(4.dp)) {
+                    Column {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .shimmerEffect()
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            text = "$${price}",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(500),
-                            color = Black50,
-                            textDecoration = TextDecoration.LineThrough
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .shimmerEffect()
                         )
-                    } else {
-                        Text(
-                            text = "$${price}",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(700),
-                            color = Black100
-                        )
+                    }
+                }
+            } else {
+                Column(modifier = Modifier.padding(4.dp)) {
+                    Text(
+                        text = product.name,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight(450),
+                        color = Black100,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        if (sale > 0f) {
+                            Text(
+                                text = "$${"%.2f".format(price.toFloat() * (1 - sale / 100))}",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(700),
+                                color = Black100
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "$${price}",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(500),
+                                color = Black50,
+                                textDecoration = TextDecoration.LineThrough
+                            )
+                        } else {
+                            Text(
+                                text = "$${price}",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight(700),
+                                color = Black100
+                            )
+                        }
                     }
                 }
             }

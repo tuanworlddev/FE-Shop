@@ -5,13 +5,17 @@ import com.dacs3.shop.repository.CategoryRepository
 import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
 import com.dacs3.shop.repository.UserRepository
+import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
 import com.dacs3.shop.ui.screens.category.CategoryViewModel
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsViewModel
 import com.dacs3.shop.ui.screens.home.HomeViewModel
 import com.dacs3.shop.ui.screens.login.LoginViewModel
+import com.dacs3.shop.ui.screens.product.create.CreateProductViewModel
 import com.dacs3.shop.ui.screens.product.details.ProductDetailsViewModel
 import com.dacs3.shop.ui.screens.product.management.ProductManageViewModel
+import com.dacs3.shop.ui.screens.product.newproduct.ProductNewViewModel
+import com.dacs3.shop.ui.screens.product.saleproduct.ProductSaleViewModel
 import com.dacs3.shop.ui.screens.register.SignUpViewModel
 import dagger.Module
 import dagger.Provides
@@ -76,8 +80,30 @@ object ViewModelModule {
 
     @Provides
     fun provideProductManageViewModel(
-        productRepository: ProductRepository
+        productRepository: ProductRepository,
+        variantRepository: VariantRepository
     ): ProductManageViewModel {
-        return ProductManageViewModel(productRepository)
+        return ProductManageViewModel(productRepository, variantRepository)
+    }
+
+    @Provides
+    fun provideProductSaleViewModel(
+        productRepository: ProductRepository
+    ): ProductSaleViewModel {
+        return ProductSaleViewModel(productRepository)
+    }
+
+    @Provides
+    fun provideProductNewViewModel(
+        productRepository: ProductRepository
+    ): ProductNewViewModel {
+        return ProductNewViewModel(productRepository)
+    }
+
+    @Provides
+    fun provideCreateProductViewModel(
+        productRepository: ProductRepository
+    ): CreateProductViewModel {
+        return CreateProductViewModel(productRepository)
     }
 }

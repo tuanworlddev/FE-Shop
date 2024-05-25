@@ -94,13 +94,13 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
             }
             Section(
                 title = stringResource(id = R.string.top_selling),
-                onSeeAllClick = { /*TODO*/ }
+                onSeeAllClick = { navController.navigate("product-sale") }
             ) {
                 HomeTopSelling(uiState.saleProducts, navController)
             }
             Section(
                 title = stringResource(id = R.string.new_in),
-                onSeeAllClick = { /*TODO*/ }
+                onSeeAllClick = { navController.navigate("product-new") }
             ) {
                 HomeNewIn(uiState.newProducts, navController)
             }
@@ -184,7 +184,7 @@ fun HomeCategory(categories: List<Category>?, navController: NavHostController) 
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             if (categories.isNullOrEmpty()) {
-                Text(text = "Category Not Found", color = Black50)
+                Text(text = "Category Not Found", color = Black50, textAlign = TextAlign.Center)
             } else {
                 categories.forEach { category ->
                     HomeCategoryCard(category, navController)
@@ -201,7 +201,7 @@ fun HomeTopSelling(saleProducts: List<Product>?, navController: NavHostControlle
         modifier = Modifier.fillMaxWidth()
     ) {
         if (saleProducts.isNullOrEmpty()) {
-            Text(text = "Sale Products Not Found", color = Black50)
+            Text(text = "Sale Products Not Found", color = Black50, textAlign = TextAlign.Center)
         } else {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState())
@@ -221,7 +221,7 @@ fun HomeNewIn(products: List<Product>?, navController: NavHostController) {
         modifier = Modifier.fillMaxWidth()
     ) {
         if (products.isNullOrEmpty()) {
-            Text(text = "New Products Not Found", color = Black50)
+            Text(text = "New Products Not Found", color = Black50, textAlign = TextAlign.Center)
         } else {
             val productList = products.chunked(2)
             productList.forEach { product2 ->

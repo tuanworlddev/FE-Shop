@@ -217,6 +217,10 @@ fun LoggedInScreen(user: User?, accountViewModel: AccountViewModel, navControlle
                         navController.navigate("product-management")
                     }
                     Spacer(modifier = Modifier.height(8.dp))
+                    CardLinkItem(title = "Order Management") {
+                        navController.navigate("order-management")
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
                     CardLinkItem(title = "Category Management") {
                         navController.navigate("category-management")
                     }
