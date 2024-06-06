@@ -127,6 +127,7 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, navController: NavHost
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(color = Color.White)
                     .verticalScroll(rememberScrollState())
             ) {
                 TopBarProductDetails(navController = navController, onAddWishlist = {})
@@ -144,9 +145,9 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, navController: NavHost
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
                 ) {
-                    if (uiState.currentVariant!!.sale > 0) {
+                    if (uiState.currentVariant!!.sale!! > 0) {
                         Text(
-                            text = "$${productDetailsViewModel.roundDouble(uiState.currentVariant.price * (1 - (uiState.currentVariant.sale / 100)))}",
+                            text = "$${productDetailsViewModel.roundDouble(uiState.currentVariant.price!! * (1 - (uiState.currentVariant.sale!! / 100)))}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight(700),
                             color = Primary100
@@ -169,11 +170,11 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, navController: NavHost
                     }
                 }
                 SpacerHeight(int = 15)
-                SizeButton(value = uiState.currentVariant!!.size) {
+                SizeButton(value = uiState.currentVariant!!.size!!.name) {
                     showSizeModal.value = true
                 }
                 SpacerHeight(int = 15)
-                ColorButton(colorHex = uiState.currentVariant.color.value) {
+                ColorButton(colorHex = uiState.currentVariant.color!!.value) {
                     showColorModal.value = true
                 }
                 SpacerHeight(int = 15)
@@ -292,9 +293,10 @@ fun SizeBottomSheetModal(uiState: ProductDetailsUiState, showSizeModal: MutableS
                     }
                     SpacerHeight(int = 20)
                     LazyColumn {
-                        items(uiState.product!!.variants.map { it.size }) { size ->
-                            SizeItemButton(value = size, isSelected = uiState.currentVariant!!.size == size) {
-                                productDetailsViewModel.onSizeChange(size = size)
+                        val sizes = uiState.product!!.variants.map { it.size }.toSet().toList()
+                        items(sizes) { size ->
+                            SizeItemButton(value = size!!.name, isSelected = uiState.currentVariant!!.size == size) {
+                                productDetailsViewModel.onSizeChange(sizeId = size.id)
                                 showSizeModal.value = false
                             }
                             SpacerHeight(int = 16)
@@ -310,7 +312,7 @@ fun SizeBottomSheetModal(uiState: ProductDetailsUiState, showSizeModal: MutableS
 @Composable
 fun ColorBottomSheetModal(uiState: ProductDetailsUiState, showColorModal: MutableState<Boolean>, productDetailsViewModel: ProductDetailsViewModel) {
     if (showColorModal.value) {
-        val validColors = productDetailsViewModel.getColorsForSize(uiState.currentVariant!!.size)
+        val validColors = productDetailsViewModel.getColorsForSize(uiState.currentVariant!!.size!!.id)
         ModalBottomSheet(
             onDismissRequest = { showColorModal.value = false },
             containerColor = Color.White,
@@ -348,12 +350,12 @@ fun ColorBottomSheetModal(uiState: ProductDetailsUiState, showColorModal: Mutabl
                     SpacerHeight(int = 20)
                     LazyColumn {
                         items(uiState.product!!.variants.map { it.color }
-                            .distinctBy { it.id }) { color ->
+                            .distinctBy { it!!.id }) { color ->
                             val enabled = validColors.contains(color)
                             ColorItemButton(
-                                name = color.name,
+                                name = color!!.name,
                                 colorHex = color.value,
-                                isSelected = uiState.currentVariant.color.id == color.id,
+                                isSelected = uiState.currentVariant.color!!.id == color.id,
                                 enabled = enabled
                             ) {
                                 if (enabled) {

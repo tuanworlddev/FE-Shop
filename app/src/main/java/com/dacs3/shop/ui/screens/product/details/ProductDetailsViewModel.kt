@@ -26,7 +26,7 @@ class ProductDetailsViewModel @Inject constructor(private val productRepository:
                 if (response.isSuccessful) {
                     val result = response.body()
                     val firstVariant = result!!.variants.first()
-                    _productDetailsUiState.value = _productDetailsUiState.value.copy(product = result, currentVariant = firstVariant, total = priceSale(firstVariant.price, firstVariant.sale, 1), isLoading = false)
+                    _productDetailsUiState.value = _productDetailsUiState.value.copy(product = result, currentVariant = firstVariant, total = priceSale(firstVariant.price!!, firstVariant.sale!!, 1), isLoading = false)
                 } else {
                     _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = response.errorBody().toString(), isLoading = false)
                 }
@@ -36,27 +36,27 @@ class ProductDetailsViewModel @Inject constructor(private val productRepository:
         }
     }
 
-    fun onSizeChange(size: String) {
+    fun onSizeChange(sizeId: Int) {
         val currentVariants = _productDetailsUiState.value.product!!.variants
-        val newVariant = currentVariants.find { it.size == size}
+        val newVariant = currentVariants.find { it.size!!.id == sizeId}
         if (newVariant != null) {
-            _productDetailsUiState.value = _productDetailsUiState.value.copy(currentVariant = newVariant, total = priceSale(newVariant.price, newVariant.sale, 1), quantity = 1)
+            _productDetailsUiState.value = _productDetailsUiState.value.copy(currentVariant = newVariant, total = priceSale(newVariant.price!!, newVariant.sale!!, 1), quantity = 1)
         }
     }
 
     fun onColorChange(colorId: Int) {
         val currentVariants = _productDetailsUiState.value.product!!.variants
-        val newVariant = currentVariants.find { it.size == _productDetailsUiState.value.currentVariant!!.size && it.color.id == colorId }
+        val newVariant = currentVariants.find { it.size == _productDetailsUiState.value.currentVariant!!.size && it.color!!.id == colorId }
         if (newVariant != null) {
-            _productDetailsUiState.value = _productDetailsUiState.value.copy(currentVariant = newVariant, total = priceSale(newVariant.price, newVariant.sale, 1), quantity = 1)
+            _productDetailsUiState.value = _productDetailsUiState.value.copy(currentVariant = newVariant, total = priceSale(newVariant.price!!, newVariant.sale!!, 1), quantity = 1)
         }
     }
 
-    fun getColorsForSize(size: String): List<Color> {
+    fun getColorsForSize(sizeId: Int): List<Color?> {
         return _productDetailsUiState.value.product?.variants
-            ?.filter { it.size == size }
+            ?.filter { it.size!!.id == sizeId }
             ?.map { it.color }
-            ?.distinctBy { it.id }
+            ?.distinctBy { it!!.id }
             ?: emptyList()
     }
 
@@ -65,16 +65,16 @@ class ProductDetailsViewModel @Inject constructor(private val productRepository:
         val currentVariant = _productDetailsUiState.value.currentVariant
         if (currentQuantity > 1) {
             val newQuantity = currentQuantity - 1
-            _productDetailsUiState.value = _productDetailsUiState.value.copy(quantity = newQuantity, total = priceSale(currentVariant!!.price, currentVariant.sale, newQuantity))
+            _productDetailsUiState.value = _productDetailsUiState.value.copy(quantity = newQuantity, total = priceSale(currentVariant!!.price!!, currentVariant.sale!!, newQuantity))
         }
     }
 
     fun onIncrease() {
         val currentQuantity = _productDetailsUiState.value.quantity
         val currentVariant = _productDetailsUiState.value.currentVariant
-        if (currentQuantity < currentVariant!!.quantity) {
+        if (currentQuantity < currentVariant!!.quantity!!) {
             val newQuantity = currentQuantity + 1
-            _productDetailsUiState.value = _productDetailsUiState.value.copy(quantity = newQuantity, total = priceSale(currentVariant.price, currentVariant.sale, newQuantity))
+            _productDetailsUiState.value = _productDetailsUiState.value.copy(quantity = newQuantity, total = priceSale(currentVariant.price!!, currentVariant.sale!!, newQuantity))
         }
     }
 

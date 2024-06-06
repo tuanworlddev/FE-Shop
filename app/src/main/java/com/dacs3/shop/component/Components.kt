@@ -2,6 +2,7 @@ package com.dacs3.shop.component
 
 import android.hardware.lights.Light
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,8 +69,7 @@ fun TopAppBarComponent(navController: NavHostController, title: String? = null) 
                fontWeight = FontWeight(700),
                fontSize =  16.sp
            )
-
-           Spacer(modifier = Modifier.weight(1f))
+           Box(modifier = Modifier.size(40.dp))
        }
     }
 }

@@ -2,8 +2,10 @@ package com.dacs3.shop.di
 
 import com.dacs3.shop.repository.AuthRepository
 import com.dacs3.shop.repository.CategoryRepository
+import com.dacs3.shop.repository.ColorRepository
 import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
+import com.dacs3.shop.repository.SizeRepository
 import com.dacs3.shop.repository.UserRepository
 import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
@@ -102,8 +104,13 @@ object ViewModelModule {
 
     @Provides
     fun provideCreateProductViewModel(
-        productRepository: ProductRepository
+        productRepository: ProductRepository,
+        colorRepository: ColorRepository,
+        sizeRepository: SizeRepository,
+        categoryRepository: CategoryRepository
     ): CreateProductViewModel {
-        return CreateProductViewModel(productRepository)
+        return CreateProductViewModel(
+            productRepository, sizeRepository, colorRepository, categoryRepository
+        )
     }
 }

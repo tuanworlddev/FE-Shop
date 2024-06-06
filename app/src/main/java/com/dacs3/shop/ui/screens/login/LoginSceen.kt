@@ -80,7 +80,12 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        ButtonPrimary(onClick = { loginViewModel.login() }, text = stringResource(id = R.string.sign_in), enabled = !uiState.isLoading)
+        ButtonPrimary(
+            onClick = { loginViewModel.login() },
+            text = stringResource(id = R.string.sign_in),
+            enabled = !uiState.isLoading,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -21,7 +21,7 @@ class ProductSaleViewModel @Inject constructor(private val productRepository: Pr
             try {
                 val response = productRepository.getAllProducts()
                 if (response.isSuccessful) {
-                    val products = response.body()!!.filter { it.variants.first().sale > 0 }.reversed()
+                    val products = response.body()!!.filter { it.variants.first().sale!! > 0 }.reversed()
                     _uiState.value = _uiState.value.copy(products = products, isLoading = false)
                 } else {
                     _uiState.value = _uiState.value.copy(isLoading = false)

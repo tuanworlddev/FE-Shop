@@ -61,7 +61,7 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
     val firstVariant = product.variants.firstOrNull()
     if (firstVariant != null) {
         val price = firstVariant.price
-        val sale: Double = firstVariant.sale
+        val sale: Double = firstVariant.sale!!
         var isLoading by remember { mutableStateOf(true) }
 
         Column(
@@ -158,7 +158,7 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                     ) {
                         if (sale > 0f) {
                             Text(
-                                text = "$${"%.2f".format(price.toFloat() * (1 - sale / 100))}",
+                                text = "$${"%.2f".format(price!!.toFloat() * (1 - sale / 100))}",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight(700),
                                 color = Black100

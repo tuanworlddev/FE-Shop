@@ -42,7 +42,7 @@ fun CustomTextField(
         TextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = {
+            label = {
                 Text(text = label, color = Black50)
             },
             singleLine = true,

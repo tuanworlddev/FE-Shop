@@ -3,7 +3,9 @@ package com.dacs3.shop.di
 import com.dacs3.shop.interceptor.AuthInterceptor
 import com.dacs3.shop.network.AuthService
 import com.dacs3.shop.network.CategoryService
+import com.dacs3.shop.network.ColorService
 import com.dacs3.shop.network.ProductService
+import com.dacs3.shop.network.SizeService
 import com.dacs3.shop.network.UserService
 import com.dacs3.shop.network.VariantService
 import dagger.Module
@@ -31,7 +33,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.1.2:8080/")
+            .baseUrl("http://192.168.1.14:8080/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -65,5 +67,17 @@ object NetworkModule {
     @Singleton
     fun provideVariantService(retrofit: Retrofit): VariantService {
         return retrofit.create(VariantService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideColorService(retrofit: Retrofit): ColorService {
+        return retrofit.create(ColorService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSizeService(retrofit: Retrofit): SizeService {
+        return retrofit.create(SizeService::class.java)
     }
 }

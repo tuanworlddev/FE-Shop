@@ -223,7 +223,7 @@ fun ProductItem(product: Product, navHostController: NavHostController, uiState:
                         Spacer(modifier = Modifier.width(5.dp))
                         IconButton(
                             onClick = {
-                                productManageViewModel.onSelectProductChange(variant.id)
+                                productManageViewModel.onSelectProductChange(variant.id!!)
                                 showDialog = true
                             },
                             modifier = Modifier

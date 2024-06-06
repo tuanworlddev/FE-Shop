@@ -48,13 +48,12 @@ import com.dacs3.shop.ui.theme.Primary50
 fun ButtonPrimary(
     onClick: () -> Unit,
     text: String,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = { onClick() },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(49.dp),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             containerColor = Primary100,
             disabledContainerColor = Primary50
@@ -92,6 +91,48 @@ fun ButtonLoginSocial(
             text = text,
             color = Black100
         )
+    }
+}
+
+@Composable
+fun CategoryButton(value: String, onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Light2,
+            contentColor = Black100
+        ),
+        shape = RoundedCornerShape(100.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Category",
+                fontSize = 16.sp,
+                fontWeight = FontWeight(450)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = value,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(700)
+                )
+                SpacerWidth(int = 20)
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
     }
 }
 
