@@ -66,11 +66,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dacs3.shop.R
+import com.dacs3.shop.component.AlertDialogNotification
 import com.dacs3.shop.component.ButtonPrimary
 import com.dacs3.shop.component.CategoryButton
 import com.dacs3.shop.component.ColorButton
 import com.dacs3.shop.component.ColorItemButton
 import com.dacs3.shop.component.CustomTextField
+import com.dacs3.shop.component.ErrorDialog
 import com.dacs3.shop.component.MutableTextFiled
 import com.dacs3.shop.component.RichText
 import com.dacs3.shop.component.SizeButton
@@ -89,6 +91,7 @@ import com.dacs3.shop.ui.theme.Primary100
 import com.dacs3.shop.model.Color
 import com.dacs3.shop.model.Size
 import com.dacs3.shop.model.Variant
+import com.dacs3.shop.ui.screens.loading.LoadingDialog
 import com.dacs3.shop.ui.theme.BlackTransparent30
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -100,8 +103,11 @@ fun CreateProductScreen(
     viewModel: CreateProductViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
     val context = LocalContext.current
+
     val coroutineScope = rememberCoroutineScope()
+
     val pickImage = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetMultipleContents()) { uris: List<Uri> ->
         uris.let { uriList ->
             uriList.forEach { uri ->
@@ -113,6 +119,7 @@ fun CreateProductScreen(
                     }
                     imageBitmap?.let { image ->
                         viewModel.addImage(image)
+                        viewModel.addImageUri(uri)
                     }
                 }
             }
@@ -125,6 +132,23 @@ fun CreateProductScreen(
 
     val showCategoryModal = remember {
         mutableStateOf(false)
+    }
+
+    if (uiState.isLoading) {
+        LoadingDialog(text = "Product creating")
+    }
+
+    if (uiState.errorMessage != null) {
+        ErrorDialog(message = uiState.errorMessage!!) {
+            viewModel.onErrorMessageChanged()
+        }
+    }
+
+    if (uiState.createProductSuccess) {
+        AlertDialogNotification(
+            onDismissRequest = {
+                viewModel.resetUiState()
+                viewModel.onCreateProductSuccessChanged(false) }, dialogTitle = "Success", dialogText = "Product created successfully")
     }
 
     Surface(
@@ -210,7 +234,7 @@ fun CreateProductScreen(
                             sizes = uiState.sizes,
                             colors = uiState.colors,
                             onVariantChange = {
-                                viewModel.updateVariant(index, variant)
+                                viewModel.updateVariant(index, it)
                             }
                         )
                         SpacerHeight(int = 5)
@@ -233,7 +257,7 @@ fun CreateProductScreen(
             SpacerHeight(int = 20)
             ButtonPrimary(
                 text = "Create Product",
-                onClick = { /*TODO*/ },
+                onClick = { viewModel.createProduct() },
                 modifier = Modifier.fillMaxWidth()
             )
             SpacerHeight(int = 20)
@@ -283,6 +307,7 @@ fun VariantItem(
     colors: List<Color>,
     onVariantChange: (Variant) -> Unit
 ) {
+
     val showSizeModal = remember {
         mutableStateOf(false)
     }
@@ -302,7 +327,9 @@ fun VariantItem(
         SpacerHeight(int = 10)
         CustomTextField(
             value = variant.quantity.toString(),
-            onValueChange = { onVariantChange(variant.copy(quantity = it.toIntOrNull() ?: 0)) },
+            onValueChange = {
+                onVariantChange(variant.copy(quantity = it.toIntOrNull() ?: 0))
+                            },
             label = "Quantity"
         )
         SpacerHeight(int = 10)
@@ -366,7 +393,6 @@ fun SizeBottomModal(state: MutableState<Boolean>, sizes: List<Size>, selected: S
                                 value = size.name,
                                 isSelected = selected.id == size.id
                             ) {
-                                Log.d("SIZE", size.name)
                                 onSizeChange(size)
                                 state.value = false
                             }

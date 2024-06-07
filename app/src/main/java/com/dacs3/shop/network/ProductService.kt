@@ -1,6 +1,7 @@
 package com.dacs3.shop.network
 
 import com.dacs3.shop.model.Product
+import com.dacs3.shop.model.ProductDto
 import com.dacs3.shop.model.ResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -21,7 +22,7 @@ interface ProductService {
     suspend fun getProductByCategory(@Path("id") id: Int): Response<List<Product>>
 
     @POST("api/products")
-    suspend fun addProduct(product: Product): Response<ResponseDto>
+    suspend fun addProduct(@Body productDto: ProductDto): Response<ResponseDto>
 
     @PUT("api/products/{id}")
     suspend fun updateProduct(@Path("id") id: Int, @Body product: Product): Response<ResponseDto>

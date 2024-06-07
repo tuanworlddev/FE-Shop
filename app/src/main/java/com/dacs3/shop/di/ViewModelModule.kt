@@ -6,6 +6,7 @@ import com.dacs3.shop.repository.ColorRepository
 import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
 import com.dacs3.shop.repository.SizeRepository
+import com.dacs3.shop.repository.UploadImageRepository
 import com.dacs3.shop.repository.UserRepository
 import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
@@ -107,10 +108,11 @@ object ViewModelModule {
         productRepository: ProductRepository,
         colorRepository: ColorRepository,
         sizeRepository: SizeRepository,
-        categoryRepository: CategoryRepository
+        categoryRepository: CategoryRepository,
+        uploadImageRepository: UploadImageRepository
     ): CreateProductViewModel {
         return CreateProductViewModel(
-            productRepository, sizeRepository, colorRepository, categoryRepository
+            productRepository, sizeRepository, colorRepository, categoryRepository, uploadImageRepository
         )
     }
 }
