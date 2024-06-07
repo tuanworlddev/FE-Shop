@@ -51,13 +51,7 @@ fun BottomBarContainer(navController: NavHostController, bottomBarState: Mutable
                 NavigationBarItem(
                     selected = currentRoute == navItem.route,
                     onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigate(navItem.route)
                     },
                     icon = {
                         Icon(
