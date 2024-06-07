@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -44,7 +45,7 @@ fun BottomBarContainer(navController: NavHostController, bottomBarState: Mutable
         NavigationBar(
             containerColor = Color.White,
             contentColor = Color.White,
-            modifier = Modifier.height(60.dp)
+            modifier = Modifier.height(80.dp)
         ) {
             NavItems.bottomNavItems.forEach { navItem ->
                 NavigationBarItem(
@@ -74,7 +75,7 @@ fun BottomBarContainer(navController: NavHostController, bottomBarState: Mutable
                         disabledIconColor = Color.White,
                         disabledTextColor = Color.White
                     ),
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp).align(Alignment.CenterVertically)
                 )
             }
         }

@@ -19,4 +19,17 @@ val Light2 = Color(0xFFF4F4F4)
 val Warning = Color(0xFFF7BB09)
 
 val BlackTransparent30 = Color(0x4D000000)
+<<<<<<< HEAD
 val PrimaryTransparent10 = Color(0x1A8E6CEF)
+=======
+
+val MainPurple = Color(0xFF8E6CEF)
+
+val mainGray = Color(0xFFf4f4f4)
+
+val white = Color(0xFFFFFFFF)
+
+val mainGrayStrong = Color(0xFF727272)
+
+val black = Color(0xFF000000)
+>>>>>>> 66758995ed08a342e71902e53d002a91211220b6

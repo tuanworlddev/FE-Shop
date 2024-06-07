@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -59,10 +61,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -88,7 +92,12 @@ import com.dacs3.shop.ui.screens.loading.LoadingScreen
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Light2
+import com.dacs3.shop.ui.theme.MainPurple
 import com.dacs3.shop.ui.theme.Primary100
+import com.dacs3.shop.ui.theme.circularFont
+import com.dacs3.shop.ui.theme.mainGray
+import com.dacs3.shop.ui.theme.mainGrayStrong
+import com.dacs3.shop.ui.theme.white
 import java.math.BigDecimal
 import java.util.Collections.addAll
 
@@ -146,9 +155,9 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
                 SpacerHeight(int = 15)
                 Text(
                     text = uiState.product.name,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(700),
-                    color = Black100
+                    fontSize = 18.sp,
+                    fontFamily = circularFont,
+                    fontWeight = FontWeight(600)
                 )
                 SpacerHeight(int = 10)
                 Row(
@@ -160,7 +169,7 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
                             text = "$${productDetailsViewModel.roundDouble(uiState.currentVariant.price!! * (1 - (uiState.currentVariant.sale!! / 100)))}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight(700),
-                            color = Primary100
+                            color = Primary100, fontFamily = circularFont
                         )
                         SpacerWidth(int = 15)
                         Text(
@@ -168,18 +177,18 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
                             fontSize = 16.sp,
                             fontWeight = FontWeight(500),
                             color = Black100,
-                            textDecoration = TextDecoration.LineThrough
+                            textDecoration = TextDecoration.LineThrough, fontFamily = circularFont
                         )
                     } else {
                         Text(
                             text = "$${uiState.currentVariant.price}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight(700),
-                            color = Primary100
+                            color = Primary100, fontFamily = circularFont
                         )
                     }
                 }
-                SpacerHeight(int = 15)
+                SpacerHeight(int = 24)
                 SizeButton(value = uiState.currentVariant!!.size!!.name) {
                     showSizeModal.value = true
                 }
@@ -194,35 +203,35 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
                     text = "Description",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700),
-                    color = Black100
+                    color = Black100, fontFamily = circularFont
                 )
                 SpacerHeight(int = 20)
                 Text(
                     text = uiState.product.description,
                     fontSize = 12.sp,
                     fontWeight = FontWeight(450),
-                    color = Black50
+                    color = Black50, fontFamily = circularFont
                 )
                 SpacerHeight(int = 20)
                 Text(
                     text = "Shipping & Returns",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700),
-                    color = Black100
+                    color = Black100, fontFamily = circularFont
                 )
                 SpacerHeight(int = 20)
                 Text(
                     text = "Free standard shipping and free 60-day returns",
                     fontSize = 12.sp,
                     fontWeight = FontWeight(700),
-                    color = Black50
+                    color = Black50, fontFamily = circularFont
                 )
                 SpacerHeight(int = 30)
                 Text(
                     text = "Reviews",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700),
-                    color = Black100
+                    color = Black100, fontFamily = circularFont
                 )
                 SpacerHeight(int = 20)
 
@@ -278,13 +287,13 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
                     text = "$${uiState.total}",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(700),
-                    color = Color.White
+                    color = Color.White, fontFamily = circularFont
                 )
                 Text(
                     text = "Add to Cart",
                     fontSize = 16.sp,
                     fontWeight = FontWeight(450),
-                    color = Color.White
+                    color = Color.White, fontFamily = circularFont
                 )
             }
         }
@@ -295,7 +304,8 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SizeBottomSheetModal(uiState: ProductDetailsUiState, showSizeModal: MutableState<Boolean>, productDetailsViewModel: ProductDetailsViewModel) {
+fun SizeBottomSheetModal(uiState: ProductDetailsUiState, showSizeModal: MutableState<Boolean>,
+                         productDetailsViewModel: ProductDetailsViewModel) {
     if (showSizeModal.value) {
         ModalBottomSheet(
             onDismissRequest = { showSizeModal.value = false },
@@ -342,6 +352,77 @@ fun SizeBottomSheetModal(uiState: ProductDetailsUiState, showSizeModal: MutableS
                             SpacerHeight(int = 16)
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+
+
+@Composable
+fun itemOfButtonSheet(string: String, check: Boolean, index2: Int, onToggle: (index1: Int) -> Unit) {
+    Column {
+        Row {
+            SpacerWidth(int = 20)
+            Row(modifier = Modifier
+                .height(56.dp)
+                .weight(1f)) {
+                Button(onClick = { onToggle(index2) },
+                    colors = ButtonDefaults.buttonColors(containerColor = if (!check) mainGray
+                    else MainPurple), modifier = Modifier.fillMaxHeight()) {
+                    if(check) {
+                        Box(Modifier.width(250.dp)) {
+                            Text(text = string, fontFamily = circularFont, fontSize = 15.sp, maxLines = 1,
+                                overflow = TextOverflow.Ellipsis)
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.choose),
+                            contentDescription = null, Modifier.size(20.dp))
+                    }else {
+                        Box(Modifier.width(280.dp)) {
+                            Text(text = string, fontFamily = circularFont, fontSize = 15.sp, color = Color.Black, maxLines = 1,
+                                overflow = TextOverflow.Ellipsis)
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+            }
+            SpacerWidth(int = 20)
+        }
+        SpacerHeight(int = 16)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheetItem(strings: List<String>, displayBottomSheet: MutableState<Boolean>,
+                    size: MutableState<String>) {
+
+    val scrollState = rememberScrollState()
+
+    var booleanList = remember { mutableStateListOf<Boolean>().apply { addAll(strings.map { false }) } }
+
+    if(displayBottomSheet.value){
+        ModalBottomSheet(onDismissRequest = {displayBottomSheet.value = false}, containerColor = white) {
+            Column(
+                Modifier
+                    .height(200.dp)
+                    .verticalScroll(scrollState)) {
+                for((index, item) in strings.withIndex()) {
+                    if(index == 0) {
+                        SpacerHeight(int = 10)
+                    }
+                    itemOfButtonSheet(string = item, check = booleanList[index], index2 = index,
+                        onToggle = {index1 -> for((index, item) in booleanList.withIndex()) {
+                            if(index == index1) {
+                                booleanList[index] = true
+                                size.value = strings[index]
+                            }else {
+                                booleanList[index] = false
+                            }
+                        }
+                        })
                 }
             }
         }
@@ -414,62 +495,262 @@ fun ColorBottomSheetModal(uiState: ProductDetailsUiState, showColorModal: Mutabl
 
 @Composable
 fun TopBarProductDetails(navController: NavHostController, onAddWishlist: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        IconButton(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier.size(40.dp),
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = Light2,
-                contentColor = Black100
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        IconButton(
-            onClick = { onAddWishlist() },
-            modifier = Modifier.size(40.dp),
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = Light2,
-                contentColor = Black100
-            )
-        ) {
-            Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "", modifier = Modifier.size(24.dp))
+    val interactionSource = remember { MutableInteractionSource() }
+    SpacerHeight(int = 20)
+    Row {
+        androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.iconback),
+            contentDescription = null, modifier = Modifier
+                .size(40.dp)
+                .clickable(interactionSource = interactionSource, indication = null) { navController.popBackStack() })
+        Spacer(modifier = Modifier.weight(1f))
+        Box(modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(color = colorResource(id = R.color.gray)), contentAlignment = Alignment.Center){
+            androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.heart),
+                contentDescription = null, modifier = Modifier.size(16.dp))
         }
     }
 }
 
 @Composable
 fun ProductImageContainer(images: List<Image>) {
-    LazyRow {
-        items(images) { image ->
-            SubcomposeAsyncImage(
-                model = image.url,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(width = 161.dp, height = 248.dp),
-                contentScale = ContentScale.Crop
-            ) {
-                val state = painter.state
-                if (state is AsyncImagePainter.State.Success) {
-                    SubcomposeAsyncImageContent()
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(width = 161.dp, height = 248.dp)
-                            .shimmerEffect()
-                    )
+    val scrollState = rememberScrollState()
+    Row {
+        Row(modifier = Modifier.horizontalScroll(scrollState)) {
+            for (element in images) {
+                Box(modifier = Modifier
+                    .height(248.dp)
+                    .width(161.dp)) {
+                    SubcomposeAsyncImage(model = element.url, contentDescription = null,modifier = Modifier
+                            .height(248.dp)
+                            .width(161.dp), contentScale = ContentScale.Crop) {
+                        val state = painter.state
+                        if (state is AsyncImagePainter.State.Success) {
+                            SubcomposeAsyncImageContent()
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                 .fillMaxWidth()
+                                 .size(width = 161.dp, height = 248.dp)
+                                  .shimmerEffect()
+                            )
+                        }
+
+                    }
+
                 }
+                SpacerWidth(int = 10)
             }
-            SpacerWidth(int = 10)
         }
+    }
+}
+
+@Composable
+fun SpacerHeight(int: Int) {
+    Spacer(modifier = Modifier.height(int.dp))
+}
+
+@Composable
+fun SpacerWidth(int: Int) {
+    Spacer(modifier = Modifier.width(int.dp))
+}
+
+@Composable
+fun ButtonBackAndHeart() {
+    Row {
+        SpacerWidth(int = 20)
+        androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.iconback),
+            contentDescription = null, modifier = Modifier.size(40.dp))
+        Spacer(modifier = Modifier.weight(1f))
+        Box(modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .background(color = colorResource(id = R.color.gray)), contentAlignment = Alignment.Center){
+            androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.heart),
+                contentDescription = null, modifier = Modifier.size(16.dp))
+        }
+        SpacerWidth(int = 20)
+    }
+}
+
+@Composable
+fun ListImageProductDetail() {
+    val scrollState = rememberScrollState()
+    val imageList: List<Int> = listOf(R.drawable.topselling1, R.drawable.detail1,
+        R.drawable.detail2)
+    Row {
+        SpacerWidth(int = 20)
+        Row(modifier = Modifier.horizontalScroll(scrollState)) {
+            for (element in imageList) {
+                Box(modifier = Modifier
+                    .height(248.dp)
+                    .width(161.dp)) {
+                    androidx.compose.foundation.Image(painter = painterResource(id = element),
+                        contentDescription = null, modifier = Modifier
+                            .height(248.dp)
+                            .width(161.dp), contentScale = ContentScale.Crop
+                    )
+
+                }
+                SpacerWidth(int = 10)
+            }
+        }
+        SpacerWidth(int = 20)
+    }
+}
+
+@Composable
+fun NameProductAndPrice(name: String, price: Int) {
+    Row {
+        SpacerWidth(int = 20)
+        Column {
+            Text(
+                text = name,
+                fontFamily = circularFont,
+                fontWeight = FontWeight(600),
+                fontSize = 18.sp
+            )
+            SpacerHeight(int = 15)
+            Row {
+                Text(text = "$", fontFamily = circularFont, fontWeight = FontWeight(600), color = colorResource(
+                    id = R.color.purple
+                ))
+                Text(text = price.toString(), fontFamily = circularFont, fontWeight = FontWeight(600), color = colorResource(
+                    id = R.color.purple
+                ))
+            }
+        }
+        SpacerWidth(int = 20)
+    }
+}
+
+@Composable
+fun SelectionInProductDetail(onToggle: () -> Unit, size: String) {
+    Row {
+        SpacerWidth(int = 20)
+        Box(modifier = Modifier
+            .weight(1f)
+            .height(56.dp), contentAlignment = Alignment.Center){
+            Button(onClick = onToggle, modifier = Modifier
+                .fillMaxSize(), colors = ButtonDefaults.buttonColors(containerColor = colorResource(
+                id = R.color.gray
+            ))
+            ) {
+
+                Text(text = "Size", fontFamily = circularFont, style = TextStyle(fontSize = 16.sp), color = colorResource(
+                    id = R.color.black
+                ))
+                Spacer(modifier = Modifier.weight(1f))
+                Text(text = size, fontFamily = circularFont, fontSize = 16.sp,
+                    fontWeight = FontWeight(600), color = colorResource(
+                        id = R.color.black
+                    ))
+                SpacerWidth(int = 15)
+                androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.arrowdown2),
+                    contentDescription = null, Modifier.size(22.dp))
+
+            }
+        }
+        SpacerWidth(int = 20)
+    }
+}
+
+@Composable
+fun ButtonAddOrMinusResize(int: Int, size: Int, check: Boolean, onToggle: () -> Unit) {
+    if(check) {
+        Box(modifier = Modifier
+            .size(size.dp)
+            .clip(CircleShape)
+            .background(color = colorResource(id = R.color.purple))
+            .clickable { onToggle() }){
+            androidx.compose.foundation.Image(painter = painterResource(id = int),
+                contentDescription = null, modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(14.dp))
+        }
+    }else {
+        Box(modifier = Modifier
+            .size(size.dp)
+            .clip(CircleShape)
+            .background(color = mainGrayStrong)){
+            androidx.compose.foundation.Image(painter = painterResource(id = int),
+                contentDescription = null, modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(14.dp))
+        }
+    }
+}
+
+@Composable
+fun ButtonQuantityInProductDetail(quantityTop: Int, quantity: MutableState<Int>) {
+    Row {
+        SpacerWidth(int = 20)
+        Box(modifier = Modifier
+            .weight(1f)
+            .height(56.dp), contentAlignment = Alignment.Center){
+            Button(onClick = { /*TODO*/ }, modifier = Modifier
+                .fillMaxSize(), colors = ButtonDefaults.buttonColors(containerColor = colorResource(
+                id = R.color.gray
+            )), interactionSource = NoRippleEffect()
+            ) {
+
+                Text(text = "Quantity", fontFamily = circularFont, style = TextStyle(fontSize = 16.sp), color = colorResource(
+                    id = R.color.black
+                ))
+                Spacer(modifier = Modifier.weight(1f))
+                if(quantity.value == 1) {
+                    ButtonAddOrMinusResize(int = R.drawable.whiteaddicon, size = 40, true,
+                        {quantity.value++})
+                    SpacerWidth(int = 15)
+                    Box(modifier = Modifier.width(12.dp)){
+                        Text(text = quantity.value.toString(), fontFamily = circularFont, fontSize = 16.sp,
+                            fontWeight = FontWeight(600), color = colorResource(
+                                id = R.color.black
+                            ))
+                    }
+                    SpacerWidth(int = 15)
+                    ButtonAddOrMinusResize(int = R.drawable.minus, size = 40, false, {})
+                }else if(quantity.value == quantityTop) {
+                    ButtonAddOrMinusResize(int = R.drawable.whiteaddicon, size = 40, false,
+                        {})
+                    SpacerWidth(int = 15)
+                    Box(modifier = Modifier.width(12.dp)){
+                        Text(text = quantity.value.toString(), fontFamily = circularFont, fontSize = 16.sp,
+                            fontWeight = FontWeight(600), color = colorResource(
+                                id = R.color.black
+                            ))
+                    }
+                    SpacerWidth(int = 15)
+                    ButtonAddOrMinusResize(int = R.drawable.minus, size = 40, true, {quantity.value = quantity.value - 1})
+                }else {
+                    ButtonAddOrMinusResize(int = R.drawable.whiteaddicon, size = 40, true, {quantity.value = quantity.value + 1})
+                    SpacerWidth(int = 15)
+                    Box(modifier = Modifier.width(12.dp)){
+                        Text(text = quantity.value.toString(), fontFamily = circularFont, fontSize = 16.sp,
+                            fontWeight = FontWeight(600), color = colorResource(
+                                id = R.color.black
+                            ))
+                    }
+                    SpacerWidth(int = 15)
+                    ButtonAddOrMinusResize(int = R.drawable.minus, size = 40, true, {quantity.value = quantity.value - 1})
+                }
+
+            }
+        }
+        SpacerWidth(int = 20)
+    }
+}
+
+@Composable
+fun AreaOfDescriptionInProductDetail(description: String) {
+    Row {
+        SpacerWidth(int = 20)
+        Box(Modifier.weight(1f)){
+            Text(text = description, fontSize = 14.sp, fontFamily = circularFont, color = colorResource(
+                id = R.color.textGray
+            ))
+        }
+        SpacerWidth(int = 20)
     }
 }

@@ -30,6 +30,8 @@ import androidx.navigation.NavHostController
 import com.dacs3.shop.R
 import com.dacs3.shop.component.ButtonPrimary
 import com.dacs3.shop.ui.theme.Black100
+import com.dacs3.shop.ui.theme.circularFont
+import com.dacs3.shop.ui.theme.white
 
 @Composable
 fun NotificationScreen(navController: NavHostController) {
@@ -38,9 +40,9 @@ fun NotificationScreen(navController: NavHostController) {
 
 @Composable
 fun NoNotificationScreen(onCategoryScreenChange: () -> Unit) {
-    Surface(
+    Surface(color = white,
         modifier = Modifier.fillMaxSize()
-            .background(Color.White)
+
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -52,7 +54,7 @@ fun NoNotificationScreen(onCategoryScreenChange: () -> Unit) {
                 fontWeight = FontWeight(700),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                color = Black100
+                color = Black100, fontFamily = circularFont
             )
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -64,7 +66,8 @@ fun NoNotificationScreen(onCategoryScreenChange: () -> Unit) {
                 ) {
                     Image(painter = painterResource(id = R.drawable.bell_1), contentDescription = "notification", modifier = Modifier.size(100.dp))
                     Spacer(modifier = Modifier.height(15.dp))
-                    Text(text = "No Notification yet", fontSize = 24.sp, color = Black100)
+                    Text(text = "No Notification yet", fontSize = 24.sp, color = Black100,
+                        fontFamily = circularFont)
                     Spacer(modifier = Modifier.height(15.dp))
                     ButtonPrimary(onClick = { onCategoryScreenChange() }, text = "Explore Categories")
                 }

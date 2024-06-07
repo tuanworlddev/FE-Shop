@@ -58,6 +58,8 @@ import com.dacs3.shop.model.User
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Primary100
+import com.dacs3.shop.ui.theme.circularFont
+import com.dacs3.shop.ui.theme.white
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -89,10 +91,9 @@ fun AccountScreen(navController: NavHostController, accountViewModel: AccountVie
 
 @Composable
 fun NotLoggedInScreen(onNavigationLogin: () -> Unit) {
-    Surface(
+    Surface(color = white,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
     ) {
         Column(
             modifier = Modifier
@@ -103,7 +104,8 @@ fun NotLoggedInScreen(onNavigationLogin: () -> Unit) {
         ) {
             Image(painter = painterResource(id = R.drawable.ic_send_email), contentDescription = "", modifier = Modifier.size(100.dp))
             Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "We sent you an email to reset your password.", textAlign = TextAlign.Center)
+            Text(text = "We sent you an email to reset your password.", textAlign = TextAlign.Center,
+                fontFamily = circularFont)
             Spacer(modifier = Modifier.height(20.dp))
             ButtonPrimary(onClick = { onNavigationLogin() }, text = "Return to Login")
         }

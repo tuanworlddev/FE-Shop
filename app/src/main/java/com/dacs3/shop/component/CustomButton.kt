@@ -39,10 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dacs3.shop.R
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Light2
 import com.dacs3.shop.ui.theme.Primary100
 import com.dacs3.shop.ui.theme.Primary50
+import com.dacs3.shop.ui.theme.circularFont
 
 @Composable
 fun ButtonPrimary(
@@ -61,7 +63,7 @@ fun ButtonPrimary(
         shape = RoundedCornerShape(100.dp),
         enabled = enabled
     ) {
-        Text(text = text)
+        Text(text = text, fontFamily = circularFont)
     }
 }
 
@@ -157,7 +159,7 @@ fun SizeButton(value: String, onClick: () -> Unit) {
             Text(
                 text = "Size",
                 fontSize = 16.sp,
-                fontWeight = FontWeight(450)
+                fontWeight = FontWeight(500), fontFamily = circularFont
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -168,11 +170,8 @@ fun SizeButton(value: String, onClick: () -> Unit) {
                     fontWeight = FontWeight(700)
                 )
                 SpacerWidth(int = 20)
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
+                Image(painter = painterResource(id = R.drawable.arrowdown2),
+                    contentDescription = null, Modifier.size(22.dp))
             }
         }
     }
@@ -201,7 +200,8 @@ fun ColorButton(colorHex: String, onClick: () -> Unit) {
             Text(
                 text = "Color",
                 fontSize = 16.sp,
-                fontWeight = FontWeight(450)
+                fontWeight = FontWeight(450),
+                fontFamily = circularFont
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -212,11 +212,8 @@ fun ColorButton(colorHex: String, onClick: () -> Unit) {
                     .background(color = color)
                 )
                 SpacerWidth(int = 20)
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
+                Image(painter = painterResource(id = R.drawable.arrowdown2),
+                    contentDescription = null, Modifier.size(22.dp))
             }
         }
     }
@@ -303,15 +300,17 @@ fun QuantityButton(quantity: Int, onReduce: () -> Unit, onIncrease: () -> Unit) 
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
+            com.dacs3.shop.ui.screens.product.details.SpacerWidth(int = 10)
             Text(
                 text = "Quantity",
                 fontSize = 16.sp,
                 fontWeight = FontWeight(450),
-                color = Black100
+                color = Black100,
+                fontFamily = circularFont
             )
+            Spacer(modifier = Modifier.weight(1f))
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -324,17 +323,20 @@ fun QuantityButton(quantity: Int, onReduce: () -> Unit, onIncrease: () -> Unit) 
                     modifier = Modifier.size(40.dp)
                 ) {
                     Box(
-                        modifier = Modifier.size(width = 10.dp, height = 1.dp)
+                        modifier = Modifier
+                            .size(width = 10.dp, height = 1.dp)
                             .background(color = White, shape = RoundedCornerShape(100.dp))
                     )
                 }
                 SpacerWidth(int = 20)
-                Text(
-                    text = quantity.toString(),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight(450),
-                    color = Black100
-                )
+                Box(modifier = Modifier.width(10.dp)) {
+                    Text(
+                        text = quantity.toString(),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(600),
+                        color = Black100, fontFamily = circularFont
+                    )
+                }
                 SpacerWidth(int = 20)
                 IconButton(
                     onClick = { onIncrease() },

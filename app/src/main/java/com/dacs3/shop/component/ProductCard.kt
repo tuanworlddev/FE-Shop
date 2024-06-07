@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -54,10 +56,12 @@ import com.dacs3.shop.model.Product
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Light2
+import com.dacs3.shop.ui.theme.circularFont
 import java.math.BigDecimal
 
 @Composable
 fun ProductCard(product: Product, navHostController: NavHostController) {
+    val interactionSource = remember { MutableInteractionSource() }
     val firstVariant = product.variants.firstOrNull()
     if (firstVariant != null) {
         val price = firstVariant.price
@@ -73,15 +77,15 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                 }
         ) {
             Box(
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
             ) {
                 SubcomposeAsyncImage(
                     model = product.images.first().url,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(220.dp)
-                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)),
+                        .height(220.dp),contentScale = ContentScale.FillHeight
                 ) {
                     val state = painter.state
                     if (state is AsyncImagePainter.State.Success) {
@@ -107,17 +111,20 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                             painter = if (sale > 0) painterResource(id = R.drawable.product_sale) else painterResource(id = R.drawable.product_new),
                             contentDescription = null
                         )
-                        IconButton(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.FavoriteBorder,
-                                contentDescription = "",
-                                tint = Color.White,
-                                modifier = Modifier.size(24.dp)
-                            )
+                        Column {
+                            SpacerHeight(int = 10)
+                            Row {
+                                Icon(painter = painterResource(id = R.drawable.heart), contentDescription = null,
+                                    modifier = Modifier
+                                        .size(18.dp)
+                                        .clickable(
+                                            interactionSource = interactionSource,
+                                            indication = null
+                                        ) { /*to do in here*/ })
+                                SpacerWidth(int = 10)
+                            }
                         }
+
                     }
                 }
             }
@@ -143,14 +150,16 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                 }
             } else {
                 Column(modifier = Modifier.padding(4.dp)) {
+                    SpacerHeight(int = 7)
                     Text(
                         text = product.name,
                         fontSize = 12.sp,
                         fontWeight = FontWeight(450),
                         color = Black100,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis, fontFamily = circularFont
                     )
+                    SpacerHeight(int = 9)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -161,7 +170,7 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                                 text = "$${"%.2f".format(price!!.toFloat() * (1 - sale / 100))}",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight(700),
-                                color = Black100
+                                color = Black100, fontFamily = circularFont
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -169,14 +178,14 @@ fun ProductCard(product: Product, navHostController: NavHostController) {
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight(500),
                                 color = Black50,
-                                textDecoration = TextDecoration.LineThrough
+                                textDecoration = TextDecoration.LineThrough, fontFamily = circularFont
                             )
                         } else {
                             Text(
                                 text = "$${price}",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight(700),
-                                color = Black100
+                                color = Black100, fontFamily = circularFont
                             )
                         }
                     }
