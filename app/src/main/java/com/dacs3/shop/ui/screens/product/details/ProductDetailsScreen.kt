@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -46,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,6 +73,8 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.dacs3.shop.R
 import com.dacs3.shop.component.ColorButton
 import com.dacs3.shop.component.ColorItemButton
+import com.dacs3.shop.component.CommentCard
+import com.dacs3.shop.component.CommentInput
 import com.dacs3.shop.component.ErrorScreen
 import com.dacs3.shop.component.QuantityButton
 import com.dacs3.shop.component.SizeButton
@@ -101,13 +105,19 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
     when {
         uiState.isLoading -> LoadingScreen()
         !uiState.errorMessage.isNullOrEmpty() -> ErrorScreen(message = uiState.errorMessage!!)
-        uiState.product != null -> ProductDetailsContent(uiState, navController, productDetailsViewModel)
+        uiState.product != null -> ProductDetailsContent(uiState, productId!!.toInt(), navController, productDetailsViewModel)
     }
 
 }
 
 @Composable
-fun ProductDetailsContent(uiState: ProductDetailsUiState, navController: NavHostController, productDetailsViewModel: ProductDetailsViewModel) {
+fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navController: NavHostController, productDetailsViewModel: ProductDetailsViewModel) {
+    LaunchedEffect(Unit) {
+        productDetailsViewModel.loadComments(productId)
+    }
+    val comments by productDetailsViewModel.comments.observeAsState(emptyList())
+    val users by productDetailsViewModel.users.observeAsState(emptyMap())
+
     val showSizeModal = remember {
         mutableStateOf(false)
     }
@@ -214,7 +224,37 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, navController: NavHost
                     fontWeight = FontWeight(700),
                     color = Black100
                 )
-                SpacerHeight(int = 70)
+                SpacerHeight(int = 20)
+
+                if (comments.isEmpty()) {
+                    Text(
+                        text = "Comment not found",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight(450),
+                        color = Black50
+                    )
+                } else {
+                    Text(
+                        text = "(${comments.size}) Reviews",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight(700),
+                        color = Black50
+                    )
+                    SpacerHeight(int = 20)
+                    comments.forEach { comment ->
+                        val user = users[comment.userId]
+                        user?.let {
+                            CommentCard(user = user, content = comment.content ?: "")
+                            SpacerHeight(int = 15)
+                        }
+                    }
+                }
+                Divider()
+                SpacerHeight(int = 20)
+                CommentInput(value = uiState.comment, onValueChange = { productDetailsViewModel.onCommentChanged(it) }) {
+                    productDetailsViewModel.addComment()
+                }
+                SpacerHeight(int = 80)
             }
         }
         FloatingActionButton(

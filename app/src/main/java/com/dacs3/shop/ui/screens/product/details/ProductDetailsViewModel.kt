@@ -1,10 +1,17 @@
 package com.dacs3.shop.ui.screens.product.details
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dacs3.shop.component.ErrorScreen
 import com.dacs3.shop.model.Color
+import com.dacs3.shop.model.Comment
+import com.dacs3.shop.model.User
+import com.dacs3.shop.repository.AuthRepository
+import com.dacs3.shop.repository.CommentRepository
 import com.dacs3.shop.repository.ProductRepository
+import com.dacs3.shop.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -13,9 +20,60 @@ import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailsViewModel @Inject constructor(private val productRepository: ProductRepository) : ViewModel() {
+class ProductDetailsViewModel @Inject constructor(
+    private val productRepository: ProductRepository,
+    private val commentRepository: CommentRepository,
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
     private val _productDetailsUiState = MutableStateFlow(ProductDetailsUiState())
     val productDetailsUiState = _productDetailsUiState
+
+    private val _comments = MutableLiveData<List<Comment>>()
+    val comments: LiveData<List<Comment>> = _comments
+
+    private val _users = MutableLiveData<Map<Int, User>>()
+    val users: LiveData<Map<Int, User>> = _users
+
+    fun loadComments(productId: Int) {
+        viewModelScope.launch {
+            if (authRepository.user != null) {
+                val commentsList = commentRepository.getComments(productId)
+                _comments.value = commentsList
+                loadUsers(commentsList)
+            }
+        }
+    }
+
+    private suspend fun loadUsers(comments: List<Comment>) {
+        val usersMap = mutableMapOf<Int, User>()
+        comments.forEach { comment ->
+            comment.userId?.let { userId ->
+                val response = userRepository.getUserById(userId)
+                if (response.isSuccessful) {
+                    response.body()?.let { user ->
+                        usersMap[userId] = user
+                    }
+                }
+            }
+        }
+        _users.value = usersMap
+    }
+
+    fun addComment() {
+        val currentUiState = _productDetailsUiState.value
+        viewModelScope.launch {
+            if (authRepository.user != null && currentUiState.comment.isNotEmpty()) {
+                commentRepository.addComment(Comment(userId = authRepository.user?.id!!, productId = currentUiState.product?.id!!, content = currentUiState.comment))
+                _productDetailsUiState.value = _productDetailsUiState.value.copy(comment = "")
+                loadComments(_productDetailsUiState.value.product?.id!!)
+            }
+        }
+    }
+
+    fun onCommentChanged(content: String) {
+        _productDetailsUiState.value = _productDetailsUiState.value.copy(comment = content)
+    }
 
     fun loadProduct(productId: String) {
         viewModelScope.launch {
@@ -85,4 +143,17 @@ class ProductDetailsViewModel @Inject constructor(private val productRepository:
     fun roundDouble(value: Double): Double {
         return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toDouble()
     }
+
+    fun getUserById(userId: Int): User? {
+        var user: User? = null
+        viewModelScope.launch {
+            val response = userRepository.getUserById(userId)
+            if (response.isSuccessful) {
+                user = response.body()
+            }
+        }
+        return user
+    }
+
+
 }

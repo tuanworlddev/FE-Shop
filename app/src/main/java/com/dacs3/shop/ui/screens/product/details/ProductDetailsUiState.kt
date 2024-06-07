@@ -8,6 +8,7 @@ data class ProductDetailsUiState(
     val currentVariant: Variant? = null,
     val quantity: Int = 1,
     val total: Double = 0.0,
+    val comment: String = "",
     val errorMessage: String? = null,
     val isLoading: Boolean = false
 )

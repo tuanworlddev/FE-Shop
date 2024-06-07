@@ -8,6 +8,7 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor(private val userService: UserService) {
     suspend fun getAllUsers() = userService.getAllUsers()
+    suspend fun getUserById(id: Int) = userService.getUserById(id)
     suspend fun addUser(user: User) = userService.addUser(user)
     suspend fun updateUser(id: Int, user: User) = userService.updateUser(id, user)
     suspend fun deleteUser(id: Int) = userService.deleteUser(id)

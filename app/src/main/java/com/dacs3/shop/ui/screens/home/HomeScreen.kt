@@ -61,6 +61,7 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
 
     LaunchedEffect(Unit) {
         homeViewModel.loadData()
+        homeViewModel.loadUser()
     }
 
     if (uiState.isLoading) {

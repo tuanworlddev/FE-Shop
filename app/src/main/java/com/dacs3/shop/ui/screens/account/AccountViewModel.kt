@@ -42,8 +42,8 @@ class AccountViewModel @Inject constructor(
                 } catch (e: Exception) {
                     _accountUiState.value = _accountUiState.value.copy(errorMessage = e.message)
                 }
-            } else if (dataStoreRepository.token.first() != null && authRepository.user != null) {
-                _accountUiState.value = _accountUiState.value.copy(user = authRepository.user)
+            } else if (authRepository.user != null) {
+                _accountUiState.value = _accountUiState.value.copy(user = authRepository.user, isLoggedIn = true)
             }
         }
     }

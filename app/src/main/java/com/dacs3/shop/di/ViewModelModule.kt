@@ -3,6 +3,7 @@ package com.dacs3.shop.di
 import com.dacs3.shop.repository.AuthRepository
 import com.dacs3.shop.repository.CategoryRepository
 import com.dacs3.shop.repository.ColorRepository
+import com.dacs3.shop.repository.CommentRepository
 import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
 import com.dacs3.shop.repository.SizeRepository
@@ -69,16 +70,21 @@ object ViewModelModule {
     @Provides
     fun provideHomeViewModel(
         categoryRepository: CategoryRepository,
-        productRepository: ProductRepository
+        productRepository: ProductRepository,
+        dataStoreRepository: DataStoreRepository,
+        authRepository: AuthRepository
     ): HomeViewModel {
-        return HomeViewModel(categoryRepository, productRepository)
+        return HomeViewModel(categoryRepository, productRepository, dataStoreRepository, authRepository)
     }
 
     @Provides
     fun provideProductDetailsViewModel(
-        productRepository: ProductRepository
+        productRepository: ProductRepository,
+        commentRepository: CommentRepository,
+        authRepository: AuthRepository,
+        userRepository: UserRepository
     ): ProductDetailsViewModel {
-        return ProductDetailsViewModel(productRepository)
+        return ProductDetailsViewModel(productRepository, commentRepository, authRepository, userRepository)
     }
 
     @Provides

@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dacs3.shop.model.Category
 import com.dacs3.shop.model.Product
+import com.dacs3.shop.repository.AuthRepository
 import com.dacs3.shop.repository.CategoryRepository
+import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -19,7 +22,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val dataStoreRepository: DataStoreRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
@@ -53,6 +58,24 @@ class HomeViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e("ERROR", "Exception occurred: ${e.message}")
                 _homeUiState.value = _homeUiState.value.copy(isLoading = false)
+            }
+        }
+    }
+
+    fun loadUser() {
+        viewModelScope.launch {
+            if (dataStoreRepository.token.first() != null && authRepository.user == null) {
+                try {
+                    val result = authRepository.getUser()
+                    if (result.isSuccessful) {
+                        val user = result.body()
+                        if (user != null) {
+                            authRepository.user = user
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("ERROR", "Exception occurred: ${e.message}")
+                }
             }
         }
     }

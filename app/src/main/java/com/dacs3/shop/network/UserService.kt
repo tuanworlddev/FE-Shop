@@ -14,6 +14,9 @@ interface UserService {
     @GET("api/users")
     suspend fun getAllUsers(): Response<List<User>>
 
+    @GET("api/users/{id}")
+    suspend fun getUserById(@Path("id") id: Int): Response<User>
+
     @POST("api/users")
     suspend fun addUser(@Body user: User): Response<ResponseDto>
 

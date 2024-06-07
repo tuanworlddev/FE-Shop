@@ -19,3 +19,4 @@ val Light2 = Color(0xFFF4F4F4)
 val Warning = Color(0xFFF7BB09)
 
 val BlackTransparent30 = Color(0x4D000000)
+val PrimaryTransparent10 = Color(0x1A8E6CEF)
