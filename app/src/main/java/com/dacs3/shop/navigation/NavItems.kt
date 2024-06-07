@@ -12,22 +12,22 @@ object NavItems {
     val bottomNavItems = listOf(
         NavItem(
             "Home",
-            icon = R.drawable.ic_home,
+            icon = R.drawable.homemain,
             route = "home"
         ),
         NavItem(
             "Notification",
-            icon = R.drawable.ic_notification,
+            icon = R.drawable.notimain,
             route = "notification"
         ),
         NavItem(
             "Order",
-            icon = R.drawable.ic_order,
+            icon = R.drawable.receipt1,
             route = "order"
         ),
         NavItem(
             "Account",
-            icon = R.drawable.ic_account,
+            icon = R.drawable.profilemain,
             route = "account"
         )
     )

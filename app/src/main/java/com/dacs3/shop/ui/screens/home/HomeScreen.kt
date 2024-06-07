@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,9 +23,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,21 +36,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.dacs3.shop.R
 import com.dacs3.shop.component.ProductCard
+import com.dacs3.shop.component.SpacerHeight
 import com.dacs3.shop.model.Category
 import com.dacs3.shop.model.Product
 import com.dacs3.shop.ui.screens.loading.LoadingScreen
@@ -54,6 +67,7 @@ import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Black50
 import com.dacs3.shop.ui.theme.Light2
 import com.dacs3.shop.ui.theme.Primary100
+import com.dacs3.shop.ui.theme.circularFont
 
 @Composable
 fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = hiltViewModel()) {
@@ -78,14 +92,15 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
             .background(Color.White)
             .padding(horizontal = 15.dp)
     ) {
+        Row() {
+
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
-            SearchBarButton()
             Section(
                 title = stringResource(id = R.string.categories),
                 onSeeAllClick = { navController.navigate("categories") }
@@ -120,7 +135,7 @@ fun Section(title: String, onSeeAllClick: () -> Unit, content: @Composable () ->
                 text = title,
                 color = Black100,
                 fontSize = 16.sp,
-                fontWeight = FontWeight(700)
+                fontWeight = FontWeight(700), fontFamily = circularFont
             )
             TextButton(onClick = onSeeAllClick) {
                 Text(text = stringResource(id = R.string.see_all))
@@ -132,44 +147,50 @@ fun Section(title: String, onSeeAllClick: () -> Unit, content: @Composable () ->
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBarButton() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Box(
-            modifier = Modifier
-                .background(color = Light2, shape = RoundedCornerShape(100.dp))
-                .height(40.dp)
-                .clip(RoundedCornerShape(100.dp))
-                .fillMaxWidth(0.8f)
-                .padding(10.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                Icon(imageVector = Icons.Default.Search, contentDescription = "")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(id = R.string.search), color = Black100)
+    val interactionSource = remember { MutableInteractionSource() }
+
+    var query by remember {
+        mutableStateOf("")
+    }
+    var active by remember {
+        mutableStateOf(false)
+    }
+
+    Row {
+        Box(modifier = Modifier.width(250.dp), contentAlignment = Alignment.TopCenter){
+            SearchBar(query = query, onQueryChange = {query = it}, onSearch = { newQuery ->
+                print("ABC: $newQuery")
+            }, active = active, onActiveChange = {active = it}, placeholder = { Text(text = "Search",
+                fontFamily = circularFont)},
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = SearchBarDefaults.colors(colorResource(id = R.color.gray)),
+                leadingIcon = {
+                    Image(painter = painterResource(id = R.drawable.searchnormal1),
+                        contentDescription = null, modifier = Modifier.size(18.dp))
+                }
+            ) {
             }
         }
-        IconButton(
-            onClick = { /*TODO*/ },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = Primary100,
-                contentColor = Color.White
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = null,
-                modifier = Modifier.size(26.dp)
-            )
-        }
+//        Box(modifier = Modifier
+//            .size(40.dp)
+//            .background(color = colorResource(id = R.color.purple), shape = CircleShape)
+//            .clickable(
+//                interactionSource = interactionSource,
+//                indication = null
+//            ) { /*TO DO IN HERE*/ },
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Image(painter = painterResource(id = R.drawable.bag2), contentDescription = null,
+//                modifier = Modifier.size(15.dp))
+//        }
     }
-    Spacer(modifier = Modifier.height(20.dp))
 }
+
+
 
 @Composable
 fun HomeCategory(categories: List<Category>?, navController: NavHostController) {
@@ -184,7 +205,7 @@ fun HomeCategory(categories: List<Category>?, navController: NavHostController) 
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             if (categories.isNullOrEmpty()) {
-                Text(text = "Category Not Found", color = Black50, textAlign = TextAlign.Center)
+                Text(text = "Category Not Found", color = Black50, textAlign = TextAlign.Center, fontFamily = circularFont)
             } else {
                 categories.forEach { category ->
                     HomeCategoryCard(category, navController)
@@ -271,7 +292,7 @@ fun HomeCategoryCard(category: Category, navController: NavHostController) {
             textAlign = TextAlign.Center,
             lineHeight = 14.sp,
             softWrap = true,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis, fontFamily = circularFont
         )
     }
 }
