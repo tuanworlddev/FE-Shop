@@ -8,6 +8,7 @@ import javax.inject.Inject
 class ProductRepository @Inject constructor(private val productService: ProductService) {
     suspend fun getAllProducts() = productService.getAllProducts()
     suspend fun getProductById(id: Int) = productService.getProductById(id)
+    suspend fun searchProduct(query: String) = productService.searchProduct(query)
     suspend fun getProductByCategory(id: Int) = productService.getProductByCategory(id)
     suspend fun addProduct(productDto: ProductDto) = productService.addProduct(productDto)
     suspend fun updateProduct(id: Int, product: Product) = productService.updateProduct(id, product)

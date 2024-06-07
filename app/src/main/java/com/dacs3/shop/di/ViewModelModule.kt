@@ -20,7 +20,9 @@ import com.dacs3.shop.ui.screens.product.details.ProductDetailsViewModel
 import com.dacs3.shop.ui.screens.product.management.ProductManageViewModel
 import com.dacs3.shop.ui.screens.product.newproduct.ProductNewViewModel
 import com.dacs3.shop.ui.screens.product.saleproduct.ProductSaleViewModel
+import com.dacs3.shop.ui.screens.product.search.SearchDetailsViewModel
 import com.dacs3.shop.ui.screens.register.SignUpViewModel
+import com.dacs3.shop.ui.screens.search.SearchViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -120,5 +122,17 @@ object ViewModelModule {
         return CreateProductViewModel(
             productRepository, sizeRepository, colorRepository, categoryRepository, uploadImageRepository
         )
+    }
+
+    @Provides
+    fun provideSearchDetailsViewModel(
+        productRepository: ProductRepository
+    ): SearchDetailsViewModel {
+        return SearchDetailsViewModel(productRepository)
+    }
+
+    @Provides
+    fun provideSearchViewModel() : SearchViewModel {
+        return SearchViewModel()
     }
 }

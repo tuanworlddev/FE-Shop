@@ -10,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ProductService {
     @GET("api/products")
@@ -20,6 +21,9 @@ interface ProductService {
 
     @GET("api/products/category/{id}")
     suspend fun getProductByCategory(@Path("id") id: Int): Response<List<Product>>
+
+    @GET("api/products/search")
+    suspend fun searchProduct(@Query("query") name: String): Response<List<Product>>
 
     @POST("api/products")
     suspend fun addProduct(@Body productDto: ProductDto): Response<ResponseDto>

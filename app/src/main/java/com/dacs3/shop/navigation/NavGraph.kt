@@ -25,7 +25,9 @@ import com.dacs3.shop.ui.screens.product.details.ProductDetailsScreen
 import com.dacs3.shop.ui.screens.product.management.ProductManageScreen
 import com.dacs3.shop.ui.screens.product.newproduct.ProductNewScreen
 import com.dacs3.shop.ui.screens.product.saleproduct.ProductSaleScreen
+import com.dacs3.shop.ui.screens.product.search.SearchDetailsScreen
 import com.dacs3.shop.ui.screens.register.SignUpScreen
+import com.dacs3.shop.ui.screens.search.SearchScreen
 
 @Composable
 fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostController, bottomBarState: MutableState<Boolean>) {
@@ -148,7 +150,26 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
         composable(
             route = "cart"
         ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
             CartScreen(navController = navController)
+        }
+        composable(
+            route = "search"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            SearchScreen(navController = navController)
+        }
+        composable(
+            route = "search_result/{query}"
+        ) {backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            SearchDetailsScreen(query = backStackEntry.arguments?.getString("query"), navController = navController)
         }
     }
 }

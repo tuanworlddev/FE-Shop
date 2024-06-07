@@ -47,7 +47,7 @@ fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel
     val uiState by loginViewModel.loginUiState.collectAsState()
 
     if (uiState.loginSuccess) {
-        navController.navigate("account")
+        navController.navigate("home")
     }
 
     Column(

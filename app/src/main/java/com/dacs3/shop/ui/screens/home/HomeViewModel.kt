@@ -77,6 +77,8 @@ class HomeViewModel @Inject constructor(
                 } catch (e: Exception) {
                     Log.e("ERROR", "Exception occurred: ${e.message}")
                 }
+            } else {
+                _homeUiState.value = _homeUiState.value.copy(user = null)
             }
         }
     }

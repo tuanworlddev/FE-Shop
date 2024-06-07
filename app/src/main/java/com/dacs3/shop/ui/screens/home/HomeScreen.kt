@@ -150,6 +150,9 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
                     .height(40.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .background(color = Light2, shape = RoundedCornerShape(100.dp))
+                    .clickable {
+                        navController.navigate("search")
+                    }
             ) {
                 Row(
                     modifier = Modifier
