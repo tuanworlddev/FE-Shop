@@ -70,6 +70,7 @@ class HomeViewModel @Inject constructor(
                     if (result.isSuccessful) {
                         val user = result.body()
                         if (user != null) {
+                            _homeUiState.value = _homeUiState.value.copy(user = user)
                             authRepository.user = user
                         }
                     }

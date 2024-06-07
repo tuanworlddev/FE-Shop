@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -93,15 +94,75 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
             .background(Color.White)
             .padding(horizontal = 15.dp)
     ) {
-        Row() {
-
-        }
+        SpacerHeight(int = 10)
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(
+                    onClick = { navController.navigate("account") },
+                    modifier = Modifier.size(40.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = Light2
+                    )
+                ) {
+                    if (uiState.user != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(model = uiState.user.avatar),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            tint = Primary100,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
+
+                IconButton(
+                    onClick = { navController.navigate("cart") },
+                    modifier = Modifier.size(40.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = Color.White,
+                        containerColor = Primary100
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = null
+                    )
+                }
+            }
+            SpacerHeight(int = 15)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(100.dp))
+                    .background(color = Light2, shape = RoundedCornerShape(100.dp))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "search", modifier = Modifier.size(24.dp))
+                    Text(text = "Search", fontSize = 13.sp, fontWeight = FontWeight(450), color = Black100)
+                }
+            }
+            SpacerHeight(int = 15)
             Section(
                 title = stringResource(id = R.string.categories),
                 onSeeAllClick = { navController.navigate("categories") }
