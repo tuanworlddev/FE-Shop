@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dacs3.shop.ui.screens.account.AccountScreen
+import com.dacs3.shop.ui.screens.cart.CartScreen
 import com.dacs3.shop.ui.screens.category.CategoryScreen
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsScreen
 import com.dacs3.shop.ui.screens.home.HomeScreen
@@ -143,6 +144,11 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
             }
         ) {
             CreateProductScreen(navController = navController)
+        }
+        composable(
+            route = "cart"
+        ) {
+            CartScreen(navController = navController)
         }
     }
 }
