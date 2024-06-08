@@ -16,6 +16,8 @@ import com.dacs3.shop.ui.screens.account.AccountScreen
 import com.dacs3.shop.ui.screens.cart.CartScreen
 import com.dacs3.shop.ui.screens.category.CategoryScreen
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsScreen
+import com.dacs3.shop.ui.screens.category.management.CategoryManageScreen
+import com.dacs3.shop.ui.screens.category.update.CategoryUpdateScreen
 import com.dacs3.shop.ui.screens.home.HomeScreen
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.screens.notification.NotificationScreen
@@ -170,6 +172,22 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
                 bottomBarState.value = false
             }
             SearchDetailsScreen(query = backStackEntry.arguments?.getString("query"), navController = navController)
+        }
+        composable(
+            route = "category-management"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            CategoryManageScreen(navController = navController)
+        }
+        composable(
+            route = "category-update/{categoryId}"
+        ) {backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            CategoryUpdateScreen(categoryId = backStackEntry.arguments?.getString("categoryId"), navController = navController)
         }
     }
 }

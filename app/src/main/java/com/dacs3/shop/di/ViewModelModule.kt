@@ -13,6 +13,8 @@ import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
 import com.dacs3.shop.ui.screens.category.CategoryViewModel
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsViewModel
+import com.dacs3.shop.ui.screens.category.management.CategoryManageViewModel
+import com.dacs3.shop.ui.screens.category.update.CategoryUpdateViewModel
 import com.dacs3.shop.ui.screens.home.HomeViewModel
 import com.dacs3.shop.ui.screens.login.LoginViewModel
 import com.dacs3.shop.ui.screens.product.create.CreateProductViewModel
@@ -134,5 +136,19 @@ object ViewModelModule {
     @Provides
     fun provideSearchViewModel() : SearchViewModel {
         return SearchViewModel()
+    }
+
+    @Provides
+    fun provideCategoryManageViewModel(
+        categoryRepository: CategoryRepository
+    ) : CategoryManageViewModel {
+        return CategoryManageViewModel(categoryRepository)
+    }
+
+    @Provides
+    fun provideCategoryUpdateViewModel(
+        categoryRepository: CategoryRepository
+    ) : CategoryUpdateViewModel {
+        return CategoryUpdateViewModel(categoryRepository)
     }
 }
