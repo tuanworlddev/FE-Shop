@@ -9,5 +9,6 @@ data class HomeUiState(
     val categories: List<Category>? = null,
     val newProducts: List<Product>? = null,
     val saleProducts: List<Product>? = null,
+    val cartCount: Int = 0,
     val isLoading: Boolean = false
 )

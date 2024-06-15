@@ -94,13 +94,13 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
             .background(Color.White)
             .padding(horizontal = 15.dp)
     ) {
-        SpacerHeight(int = 10)
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
+            SpacerHeight(int = 10)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -129,18 +129,39 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
                     }
                 }
 
-                IconButton(
-                    onClick = { navController.navigate("cart") },
+                Box(
                     modifier = Modifier.size(40.dp),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = Color.White,
-                        containerColor = Primary100
-                    )
+                    contentAlignment = Alignment.TopEnd
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = null
-                    )
+                    IconButton(
+                        onClick = { navController.navigate("cart") },
+                        modifier = Modifier.fillMaxSize(),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = Color.White,
+                            containerColor = Primary100
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = null
+                        )
+                    }
+                    if (uiState.cartCount > 0) {
+                        Box(
+                            modifier = Modifier
+                                .size(16.dp)
+                                .clip(CircleShape)
+                                .background(color = Color.Red, shape = CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = uiState.cartCount.toString(),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight(450),
+                                color = Color.White,
+                            )
+                        }
+                    }
                 }
             }
             SpacerHeight(int = 15)

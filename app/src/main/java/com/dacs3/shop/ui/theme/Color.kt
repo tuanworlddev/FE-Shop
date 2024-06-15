@@ -30,3 +30,8 @@ val white = Color(0xFFFFFFFF)
 val mainGrayStrong = Color(0xFF727272)
 
 val black = Color(0xFF000000)
+
+val successBg = Color(0xFFD1E7DD)
+val successText = Color(0xFF0A3622)
+val successBorder = Color(0xFFA3CFBB)
+val successLink = Color(0xFF0A3622)

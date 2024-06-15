@@ -57,6 +57,13 @@ fun AlertDanger(
     BaseAlert(text = text, backgroundColor = R.color.red_container, borderColor = R.color.red_border, textColor = R.color.red_text)
 }
 
+@Composable
+fun AlertSuccess(
+    text: String
+) {
+    BaseAlert(text = text, backgroundColor = R.color.success_background, borderColor = R.color.success_border, textColor = R.color.success_text)
+}
+
 @Preview(showBackground = true)
 @Composable
 fun BaseAlertPreview() {

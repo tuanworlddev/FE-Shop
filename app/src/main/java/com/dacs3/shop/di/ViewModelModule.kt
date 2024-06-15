@@ -1,6 +1,7 @@
 package com.dacs3.shop.di
 
 import com.dacs3.shop.repository.AuthRepository
+import com.dacs3.shop.repository.CartRepository
 import com.dacs3.shop.repository.CategoryRepository
 import com.dacs3.shop.repository.ColorRepository
 import com.dacs3.shop.repository.CommentRepository
@@ -11,6 +12,7 @@ import com.dacs3.shop.repository.UploadImageRepository
 import com.dacs3.shop.repository.UserRepository
 import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
+import com.dacs3.shop.ui.screens.cart.CartViewModel
 import com.dacs3.shop.ui.screens.category.CategoryViewModel
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsViewModel
 import com.dacs3.shop.ui.screens.category.management.CategoryManageViewModel
@@ -76,9 +78,10 @@ object ViewModelModule {
         categoryRepository: CategoryRepository,
         productRepository: ProductRepository,
         dataStoreRepository: DataStoreRepository,
-        authRepository: AuthRepository
+        authRepository: AuthRepository,
+        cartRepository: CartRepository
     ): HomeViewModel {
-        return HomeViewModel(categoryRepository, productRepository, dataStoreRepository, authRepository)
+        return HomeViewModel(categoryRepository, productRepository, dataStoreRepository, authRepository, cartRepository)
     }
 
     @Provides
@@ -86,9 +89,10 @@ object ViewModelModule {
         productRepository: ProductRepository,
         commentRepository: CommentRepository,
         authRepository: AuthRepository,
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        cartRepository: CartRepository
     ): ProductDetailsViewModel {
-        return ProductDetailsViewModel(productRepository, commentRepository, authRepository, userRepository)
+        return ProductDetailsViewModel(productRepository, commentRepository, authRepository, userRepository, cartRepository)
     }
 
     @Provides
@@ -147,8 +151,18 @@ object ViewModelModule {
 
     @Provides
     fun provideCategoryUpdateViewModel(
-        categoryRepository: CategoryRepository
+        categoryRepository: CategoryRepository,
+        uploadImageRepository: UploadImageRepository
     ) : CategoryUpdateViewModel {
-        return CategoryUpdateViewModel(categoryRepository)
+        return CategoryUpdateViewModel(categoryRepository, uploadImageRepository)
     }
+
+    @Provides
+    fun provideCartViewModel(
+        cartRepository: CartRepository,
+        authRepository: AuthRepository
+    ) : CartViewModel {
+        return CartViewModel(cartRepository, authRepository)
+    }
+
 }

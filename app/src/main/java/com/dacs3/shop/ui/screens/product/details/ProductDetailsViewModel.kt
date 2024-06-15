@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dacs3.shop.component.ErrorScreen
+import com.dacs3.shop.model.CartRequest
 import com.dacs3.shop.model.Color
 import com.dacs3.shop.model.Comment
 import com.dacs3.shop.model.User
 import com.dacs3.shop.repository.AuthRepository
+import com.dacs3.shop.repository.CartRepository
 import com.dacs3.shop.repository.CommentRepository
 import com.dacs3.shop.repository.ProductRepository
 import com.dacs3.shop.repository.UserRepository
@@ -24,7 +26,8 @@ class ProductDetailsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val commentRepository: CommentRepository,
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
     private val _productDetailsUiState = MutableStateFlow(ProductDetailsUiState())
     val productDetailsUiState = _productDetailsUiState
@@ -144,16 +147,29 @@ class ProductDetailsViewModel @Inject constructor(
         return BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).toDouble()
     }
 
-    fun getUserById(userId: Int): User? {
-        var user: User? = null
+    fun onAddToCart() {
         viewModelScope.launch {
-            val response = userRepository.getUserById(userId)
-            if (response.isSuccessful) {
-                user = response.body()
+            _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = null, isLoading = true)
+            try {
+                val currentUiState = _productDetailsUiState.value
+                if (currentUiState.currentVariant != null) {
+                    val cartRequest = CartRequest(variantId = currentUiState.currentVariant.id!!, quantity = currentUiState.quantity)
+                    val response = cartRepository.addCart(cartRequest)
+                    if (response.isSuccessful) {
+                        _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = null, isLoading = false, isAddedToCart = true)
+                    }
+                }
+            } catch (e: Exception) {
+                _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = "Error: ${e.message}", isLoading = false)
             }
         }
-        return user
     }
 
+    fun isUserExists(): Boolean {
+        return authRepository.user != null
+    }
 
+    fun onChangeIsAddedToCart(state: Boolean) {
+        _productDetailsUiState.value = _productDetailsUiState.value.copy(isAddedToCart = state)
+    }
 }

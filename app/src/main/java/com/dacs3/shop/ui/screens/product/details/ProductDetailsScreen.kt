@@ -1,6 +1,5 @@
 package com.dacs3.shop.ui.screens.product.details
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -18,30 +17,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +43,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,7 +51,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -70,11 +58,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.dacs3.shop.R
+import com.dacs3.shop.component.AlertDialogNotification
 import com.dacs3.shop.component.ColorButton
 import com.dacs3.shop.component.ColorItemButton
 import com.dacs3.shop.component.CommentCard
@@ -117,6 +107,16 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
         uiState.product != null -> ProductDetailsContent(uiState, productId!!.toInt(), navController, productDetailsViewModel)
     }
 
+    if (uiState.isAddedToCart) {
+        AlertDialogNotification(
+            dialogTitle = "Success",
+            dialogText = "Added to cart successfully",
+            onDismissRequest = {
+                productDetailsViewModel.onChangeIsAddedToCart(false)
+            }
+        )
+    }
+
 }
 
 @Composable
@@ -133,6 +133,7 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
     val showColorModal = remember {
         mutableStateOf(false)
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -267,7 +268,13 @@ fun ProductDetailsContent(uiState: ProductDetailsUiState, productId: Int, navCon
             }
         }
         FloatingActionButton(
-            onClick = { /* Do something */ },
+            onClick = {
+                      if (!productDetailsViewModel.isUserExists()) {
+                          navController.navigate("login")
+                      } else {
+                          productDetailsViewModel.onAddToCart()
+                      }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
@@ -501,7 +508,10 @@ fun TopBarProductDetails(navController: NavHostController, onAddWishlist: () -> 
         androidx.compose.foundation.Image(painter = painterResource(id = R.drawable.iconback),
             contentDescription = null, modifier = Modifier
                 .size(40.dp)
-                .clickable(interactionSource = interactionSource, indication = null) { navController.popBackStack() })
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { navController.popBackStack() })
         Spacer(modifier = Modifier.weight(1f))
         Box(modifier = Modifier
             .size(40.dp)
@@ -523,17 +533,17 @@ fun ProductImageContainer(images: List<Image>) {
                     .height(248.dp)
                     .width(161.dp)) {
                     SubcomposeAsyncImage(model = element.url, contentDescription = null,modifier = Modifier
-                            .height(248.dp)
-                            .width(161.dp), contentScale = ContentScale.Crop) {
+                        .height(248.dp)
+                        .width(161.dp), contentScale = ContentScale.Crop) {
                         val state = painter.state
                         if (state is AsyncImagePainter.State.Success) {
                             SubcomposeAsyncImageContent()
                         } else {
                             Box(
                                 modifier = Modifier
-                                 .fillMaxWidth()
-                                 .size(width = 161.dp, height = 248.dp)
-                                  .shimmerEffect()
+                                    .fillMaxWidth()
+                                    .size(width = 161.dp, height = 248.dp)
+                                    .shimmerEffect()
                             )
                         }
 

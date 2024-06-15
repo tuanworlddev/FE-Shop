@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dacs3.shop.model.Category
 import com.dacs3.shop.model.Product
 import com.dacs3.shop.repository.AuthRepository
+import com.dacs3.shop.repository.CartRepository
 import com.dacs3.shop.repository.CategoryRepository
 import com.dacs3.shop.repository.DataStoreRepository
 import com.dacs3.shop.repository.ProductRepository
@@ -24,7 +25,8 @@ class HomeViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository,
     private val dataStoreRepository: DataStoreRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeUiState())
     val homeUiState: StateFlow<HomeUiState> = _homeUiState
@@ -35,12 +37,14 @@ class HomeViewModel @Inject constructor(
 
             val categoriesDeferred = async { categoryRepository.getAllCategories() }
             val productsDeferred = async { productRepository.getAllProducts() }
+            val cartsDeferred = async { cartRepository.getCarts() }
 
             try {
                 val categoriesResponse = categoriesDeferred.await()
                 val productsResponse = productsDeferred.await()
+                val cartsResponse = cartsDeferred.await()
 
-                if (categoriesResponse.isSuccessful && productsResponse.isSuccessful) {
+                if (categoriesResponse.isSuccessful && productsResponse.isSuccessful && cartsResponse.isSuccessful) {
                     val products = productsResponse.body()!!.reversed()
                     val (saleProducts, newProducts) = products.partition {
                         (it.variants.firstOrNull()?.sale ?: 0.0) > 0.0
@@ -50,6 +54,7 @@ class HomeViewModel @Inject constructor(
                         saleProducts = saleProducts,
                         newProducts = newProducts,
                         categories = categoriesResponse.body() ?: emptyList(),
+                        cartCount = cartsResponse.body()?.size ?: 0,
                         isLoading = false
                     )
                 } else {
@@ -77,8 +82,8 @@ class HomeViewModel @Inject constructor(
                 } catch (e: Exception) {
                     Log.e("ERROR", "Exception occurred: ${e.message}")
                 }
-            } else {
-                _homeUiState.value = _homeUiState.value.copy(user = null)
+            } else if (authRepository.user != null) {
+                _homeUiState.value = _homeUiState.value.copy(user = authRepository.user)
             }
         }
     }

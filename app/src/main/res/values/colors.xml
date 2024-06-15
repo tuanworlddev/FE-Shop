@@ -16,4 +16,8 @@
     <color name="purple">#8E6CEF</color>
     <color name="placeholder">#9B9B9B</color>
     <color name="textGray">#8E8E8E</color>
+    <color name="success_text">#0a3622</color>
+    <color name="success_background">#d1e7dd</color>
+    <color name="success_border">#a3cfbb</color>
+    <color name="success_link">#0a3622</color>
 </resources>
