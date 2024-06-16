@@ -1,5 +1,6 @@
 package com.dacs3.shop.di
 
+import com.dacs3.shop.model.OrderDetails
 import com.dacs3.shop.repository.AddressRepository
 import com.dacs3.shop.repository.AuthRepository
 import com.dacs3.shop.repository.CartRepository
@@ -26,6 +27,9 @@ import com.dacs3.shop.ui.screens.checkout.CheckoutViewModel
 import com.dacs3.shop.ui.screens.home.HomeViewModel
 import com.dacs3.shop.ui.screens.login.LoginViewModel
 import com.dacs3.shop.ui.screens.order.OrderViewModel
+import com.dacs3.shop.ui.screens.order.details.OrderDetailsViewModel
+import com.dacs3.shop.ui.screens.order.item.OrderItemViewModel
+import com.dacs3.shop.ui.screens.order.manage.OrderManageViewModel
 import com.dacs3.shop.ui.screens.product.create.CreateProductViewModel
 import com.dacs3.shop.ui.screens.product.details.ProductDetailsViewModel
 import com.dacs3.shop.ui.screens.product.management.ProductManageViewModel
@@ -196,9 +200,10 @@ object ViewModelModule {
     @Provides
     fun provideCheckoutViewModel(
         cartRepository: CartRepository,
-        addressRepository: AddressRepository
+        addressRepository: AddressRepository,
+        orderRepository: OrderRepository
     ) : CheckoutViewModel {
-        return CheckoutViewModel(cartRepository, addressRepository)
+        return CheckoutViewModel(cartRepository, addressRepository, orderRepository)
     }
 
     @Provides
@@ -207,6 +212,27 @@ object ViewModelModule {
         authRepository: AuthRepository
     ) : OrderViewModel {
         return OrderViewModel(orderRepository, authRepository)
+    }
+
+    @Provides
+    fun provideOrderDetailsViewModel(
+        orderRepository: OrderRepository
+    ) : OrderDetailsViewModel {
+        return OrderDetailsViewModel(orderRepository)
+    }
+
+    @Provides
+    fun provideOrderItemViewModel(
+        orderRepository: OrderRepository
+    ) : OrderItemViewModel {
+        return OrderItemViewModel(orderRepository)
+    }
+
+    @Provides
+    fun provideOrderManageViewModel(
+        orderRepository: OrderRepository
+    ) : OrderManageViewModel {
+        return OrderManageViewModel(orderRepository)
     }
 
 }

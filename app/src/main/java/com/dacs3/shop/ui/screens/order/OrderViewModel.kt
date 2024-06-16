@@ -24,7 +24,7 @@ class OrderViewModel @Inject constructor(
                 if (isUserLoggedIn()) {
                     val response = orderRepository.getOrdersByUser()
                     if (response.isSuccessful) {
-                        _uiState.value = _uiState.value.copy(orders = response.body() ?: emptyList())
+                        _uiState.value = _uiState.value.copy(orders = response.body() ?: emptyList(), orderFilter = response.body()!!.filter { it.status == OrderStatus.Pending })
                     }
                 }
             } catch (e: Exception) {

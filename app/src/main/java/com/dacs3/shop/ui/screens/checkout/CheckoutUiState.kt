@@ -13,4 +13,5 @@ data class CheckoutUiState(
     val shippingCost: Double = 3.0,
     val loading: Boolean = false,
     val error: String? = null,
+    val isOrderSuccess: Boolean = false,
 )

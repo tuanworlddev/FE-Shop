@@ -26,6 +26,10 @@ import com.dacs3.shop.ui.screens.home.HomeScreen
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.screens.notification.NotificationScreen
 import com.dacs3.shop.ui.screens.order.OrderScreen
+import com.dacs3.shop.ui.screens.order.OrderSuccessScreen
+import com.dacs3.shop.ui.screens.order.details.OrderDetailsScreen
+import com.dacs3.shop.ui.screens.order.item.OrderItemScreen
+import com.dacs3.shop.ui.screens.order.manage.OrderMangerScreen
 import com.dacs3.shop.ui.screens.product.create.CreateProductScreen
 import com.dacs3.shop.ui.screens.product.details.ProductDetailsScreen
 import com.dacs3.shop.ui.screens.product.management.ProductManageScreen
@@ -227,6 +231,44 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
                 bottomBarState.value = false
             }
             CheckoutScreen(navController = navController)
+        }
+        composable(
+            route = "order-success"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            OrderSuccessScreen(navController = navController)
+        }
+        composable(
+            route = "order-details/{orderId}"
+        ) { backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            OrderDetailsScreen(
+                orderId = backStackEntry.arguments?.getString("orderId"),
+                navController = navController
+            )
+        }
+        composable(
+            route = "order-item/{orderId}"
+        ) { backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            OrderItemScreen(
+                orderId = backStackEntry.arguments?.getString("orderId"),
+                navController = navController
+            )
+        }
+        composable(
+            route = "order-management"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            OrderMangerScreen(navController = navController)
         }
     }
 }

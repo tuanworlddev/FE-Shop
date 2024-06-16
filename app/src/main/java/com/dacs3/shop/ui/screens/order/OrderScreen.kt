@@ -117,7 +117,9 @@ fun OrderScreen(navController: NavHostController, viewModel: OrderViewModel = hi
                     )
                 } else {
                     uiState.orderFilter.forEach {
-                        OrderCard(orderDetails = it, onClick = {} )
+                        OrderCard(orderDetails = it, onClick = {
+                            navController.navigate("order-details/${it.id}")
+                        } )
                         SpacerHeight(int = 10)
                     }
                 }

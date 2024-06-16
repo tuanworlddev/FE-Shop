@@ -220,6 +220,45 @@ fun ColorButton(colorHex: String, onClick: () -> Unit) {
 }
 
 @Composable
+fun StatusButton(value: String?, onClick: () -> Unit) {
+    Button(
+        onClick = { onClick() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Light2,
+            contentColor = Black100
+        ),
+        shape = RoundedCornerShape(100.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Status",
+                fontSize = 16.sp,
+                fontWeight = FontWeight(500), fontFamily = circularFont
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = value ?: "",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight(700)
+                )
+                SpacerWidth(int = 20)
+                Image(painter = painterResource(id = R.drawable.arrowdown2),
+                    contentDescription = null, Modifier.size(22.dp))
+            }
+        }
+    }
+}
+
+@Composable
 fun SizeItemButton(value: String, isSelected: Boolean, onClick: () -> Unit) {
     Button(
         onClick = { onClick() },

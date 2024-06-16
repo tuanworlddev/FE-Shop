@@ -4,5 +4,6 @@ data class OrderDetails(
     val id: Int? = null,
     val total: Double? = null,
     val status: OrderStatus? = null,
-    val items: List<OrderItem>? = null
+    val items: List<OrderItem>? = null,
+    val address: Address? = null
 )

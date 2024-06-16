@@ -65,6 +65,10 @@ fun CheckoutScreen(navController: NavHostController, viewModel: CheckoutViewMode
         viewModel.loadAddresses()
     }
 
+    if (uiState.isOrderSuccess) {
+        navController.navigate("order-success")
+    }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)) {
@@ -180,6 +184,7 @@ fun CheckoutScreen(navController: NavHostController, viewModel: CheckoutViewMode
                     SpacerHeight(int = 50)
                     Button(
                         onClick = {
+                                  viewModel.onOrderClick()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
