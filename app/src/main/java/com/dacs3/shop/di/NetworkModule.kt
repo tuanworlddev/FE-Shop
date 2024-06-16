@@ -1,10 +1,12 @@
 package com.dacs3.shop.di
 
 import com.dacs3.shop.interceptor.AuthInterceptor
+import com.dacs3.shop.network.AddressService
 import com.dacs3.shop.network.AuthService
 import com.dacs3.shop.network.CartService
 import com.dacs3.shop.network.CategoryService
 import com.dacs3.shop.network.ColorService
+import com.dacs3.shop.network.OrderService
 import com.dacs3.shop.network.ProductService
 import com.dacs3.shop.network.SizeService
 import com.dacs3.shop.network.UserService
@@ -86,5 +88,17 @@ object NetworkModule {
     @Singleton
     fun provideCartService(retrofit: Retrofit): CartService {
         return retrofit.create(CartService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddressService(retrofit: Retrofit): AddressService {
+        return retrofit.create(AddressService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOrderService(retrofit: Retrofit): OrderService {
+        return retrofit.create(OrderService::class.java)
     }
 }

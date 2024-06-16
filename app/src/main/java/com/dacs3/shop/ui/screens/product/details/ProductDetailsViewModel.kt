@@ -149,18 +149,17 @@ class ProductDetailsViewModel @Inject constructor(
 
     fun onAddToCart() {
         viewModelScope.launch {
-            _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = null, isLoading = true)
             try {
                 val currentUiState = _productDetailsUiState.value
                 if (currentUiState.currentVariant != null) {
                     val cartRequest = CartRequest(variantId = currentUiState.currentVariant.id!!, quantity = currentUiState.quantity)
                     val response = cartRepository.addCart(cartRequest)
                     if (response.isSuccessful) {
-                        _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = null, isLoading = false, isAddedToCart = true)
+                        _productDetailsUiState.value = _productDetailsUiState.value.copy(isAddedToCart = true)
                     }
                 }
             } catch (e: Exception) {
-                _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = "Error: ${e.message}", isLoading = false)
+                _productDetailsUiState.value = _productDetailsUiState.value.copy(errorMessage = "Error: ${e.message}")
             }
         }
     }

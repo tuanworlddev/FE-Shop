@@ -1,24 +1,31 @@
 package com.dacs3.shop.di
 
+import com.dacs3.shop.repository.AddressRepository
 import com.dacs3.shop.repository.AuthRepository
 import com.dacs3.shop.repository.CartRepository
 import com.dacs3.shop.repository.CategoryRepository
 import com.dacs3.shop.repository.ColorRepository
 import com.dacs3.shop.repository.CommentRepository
 import com.dacs3.shop.repository.DataStoreRepository
+import com.dacs3.shop.repository.OrderRepository
 import com.dacs3.shop.repository.ProductRepository
 import com.dacs3.shop.repository.SizeRepository
 import com.dacs3.shop.repository.UploadImageRepository
 import com.dacs3.shop.repository.UserRepository
 import com.dacs3.shop.repository.VariantRepository
 import com.dacs3.shop.ui.screens.account.AccountViewModel
+import com.dacs3.shop.ui.screens.address.create.AddressCreateViewModel
+import com.dacs3.shop.ui.screens.address.management.AddressManageViewModel
+import com.dacs3.shop.ui.screens.address.update.AddressUpdateViewModel
 import com.dacs3.shop.ui.screens.cart.CartViewModel
 import com.dacs3.shop.ui.screens.category.CategoryViewModel
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsViewModel
 import com.dacs3.shop.ui.screens.category.management.CategoryManageViewModel
 import com.dacs3.shop.ui.screens.category.update.CategoryUpdateViewModel
+import com.dacs3.shop.ui.screens.checkout.CheckoutViewModel
 import com.dacs3.shop.ui.screens.home.HomeViewModel
 import com.dacs3.shop.ui.screens.login.LoginViewModel
+import com.dacs3.shop.ui.screens.order.OrderViewModel
 import com.dacs3.shop.ui.screens.product.create.CreateProductViewModel
 import com.dacs3.shop.ui.screens.product.details.ProductDetailsViewModel
 import com.dacs3.shop.ui.screens.product.management.ProductManageViewModel
@@ -163,6 +170,43 @@ object ViewModelModule {
         authRepository: AuthRepository
     ) : CartViewModel {
         return CartViewModel(cartRepository, authRepository)
+    }
+
+    @Provides
+    fun provideAddressManageViewModel(
+        addressRepository: AddressRepository
+    ) : AddressManageViewModel {
+        return AddressManageViewModel(addressRepository)
+    }
+
+    @Provides
+    fun provideAddressCreateViewModel(
+        addressRepository: AddressRepository
+    ) : AddressCreateViewModel {
+        return AddressCreateViewModel(addressRepository)
+    }
+
+    @Provides
+    fun provideAddressUpdateViewModel(
+        addressRepository: AddressRepository
+    ) : AddressUpdateViewModel {
+        return AddressUpdateViewModel(addressRepository)
+    }
+
+    @Provides
+    fun provideCheckoutViewModel(
+        cartRepository: CartRepository,
+        addressRepository: AddressRepository
+    ) : CheckoutViewModel {
+        return CheckoutViewModel(cartRepository, addressRepository)
+    }
+
+    @Provides
+    fun provideOrderViewModel(
+        orderRepository: OrderRepository,
+        authRepository: AuthRepository
+    ) : OrderViewModel {
+        return OrderViewModel(orderRepository, authRepository)
     }
 
 }

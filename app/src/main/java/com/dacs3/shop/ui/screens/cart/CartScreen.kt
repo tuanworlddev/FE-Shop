@@ -2,6 +2,7 @@ package com.dacs3.shop.ui.screens.cart
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,8 +26,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,6 +61,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.dacs3.shop.R
+import com.dacs3.shop.component.ButtonPrimary
 import com.dacs3.shop.component.shimmerEffect
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Primary100
@@ -82,7 +87,9 @@ fun CartScreen(navController: NavHostController, viewModel: CartViewModel = hilt
 
 @Composable
 fun CartScreenContent(uiState: CartUiState, viewModel: CartViewModel, navController: NavHostController) {
-    Box(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -108,71 +115,100 @@ fun CartScreenContent(uiState: CartUiState, viewModel: CartViewModel, navControl
                         textAlign = TextAlign.Center
                     )
                 } else {
+                    Text(
+                        text = "Remove All",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(450),
+                        color = Black100,
+                        modifier = Modifier.align(Alignment.End)
+                            .clickable { viewModel.deleteAllCart() }
+                    )
+                    SpacerHeight(int = 10)
+                    uiState.carts.forEach { cart ->
+                        CartItemComponent(cart, viewModel)
+                        SpacerHeight(int = 10)
+                    }
+                    SpacerHeight(int = 15)
+                    Divider()
+                    SpacerHeight(int = 15)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        var selectedAll by remember {
-                            mutableStateOf(false)
-                        }
-                        Checkbox(checked = selectedAll, onCheckedChange = {
-                            selectedAll = it
-                            if (selectedAll) {
-                                viewModel.selectAllItems()
-                            } else {
-                                viewModel.deselectAllItems()
-                            } }
+                        Text(
+                            text = "Subtotal",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black50
                         )
-                        SpacerWidth(int = 5)
-                        Text(text = "Select All (${uiState.selectedItems.size})")
-                    }
-                    Divider()
-                    uiState.carts.forEach { cart ->
-                        CartItemComponent(
-                            cart = cart,
-                            onSelect = { cartId ->
-                                viewModel.toggleSelectItem(cartId)
-                            },
-                            uiState = uiState,
-                            viewModel = viewModel
+                        Text(
+                            text = "$${uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! }}",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
                         )
-                        SpacerHeight(int = 10)
                     }
-                }
-            }
-        }
-        if (uiState.carts.isNotEmpty()) {
-            FloatingActionButton(
-                onClick = {
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(100.dp))
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .background(color = Primary100, shape = RoundedCornerShape(100.dp))
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Total Price",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(450),
-                        color = Color.White, fontFamily = circularFont
-                    )
-                    Text(
-                        text = "$${uiState.totalPrice}",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color.White, fontFamily = circularFont
-                    )
+                    SpacerHeight(int = 8)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Shipping Cost",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black50
+                        )
+                        Text(
+                            text = "$${uiState.shippingCost}",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
+                        )
+                    }
+                    SpacerHeight(int = 8)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Tax",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black50
+                        )
+                        Text(
+                            text = "$${uiState.tax}",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
+                        )
+                    }
+                    SpacerHeight(int = 8)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Total",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black50
+                        )
+                        Text(
+                            text = "$${uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! } + uiState.tax + uiState.shippingCost}",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
+                        )
+                    }
+                    SpacerHeight(int = 20)
+                    ButtonPrimary(onClick = { navController.navigate("checkout") }, text = "Checkout", modifier = Modifier.fillMaxWidth())
+                    SpacerHeight(int = 15)
                 }
             }
         }
@@ -180,121 +216,129 @@ fun CartScreenContent(uiState: CartUiState, viewModel: CartViewModel, navControl
 }
 
 @Composable
-fun CartItemComponent(cart: Cart, onSelect: (cartId: Int) -> Unit, uiState: CartUiState, viewModel: CartViewModel) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Center
+fun CartItemComponent(cart: Cart, viewModel: CartViewModel) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(color = Light2, shape = RoundedCornerShape(8.dp)),
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Light2
+        )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .background(Light2),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Checkbox(
-                checked = uiState.selectedItems.contains(cart.id),
-                onCheckedChange = {
-                    onSelect(cart.id!!)
+            SubcomposeAsyncImage(
+                model = cart.productImage,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(64.dp)
+                    .background(color = Light2, shape = RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop)
+            {
+                val state = painter.state
+                if (state is AsyncImagePainter.State.Success) {
+                    SubcomposeAsyncImageContent()
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(64.dp)
+                            .shimmerEffect()
+                    )
                 }
-            )
-            SpacerWidth(int = 5)
-            Text(text = "Select")
-        }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = Light2
-            )
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
+            }
+            SpacerWidth(int = 8)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.Start
             ) {
-                SubcomposeAsyncImage(
-                    model = cart.productImage,
-                    contentDescription = null,
-                    modifier = Modifier.width(80.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val state = painter.state
-                    if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                        Box(modifier = Modifier
-                            .size(width = 60.dp, height = 80.dp)
-                            .shimmerEffect())
-                    } else {
-                        SubcomposeAsyncImageContent()
-                    }
-                }
-
-                SpacerWidth(int = 10)
-
-                Column {
                     Text(
-                        text = cart.productImage!!,
+                        text = cart.productName!!,
                         color = Black100,
-                        fontWeight = FontWeight(700),
-                        fontSize = 16.sp,
+                        fontWeight = FontWeight(450),
+                        fontSize = 12.sp,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.width(200.dp)
                     )
                     Text(
-                        text = "Price: $${cart.variant?.price!!}",
-                        color = Black100,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(450)
+                        text = "$${viewModel.roundDouble(cart.variant?.price!! * cart.quantity!! * (1 - cart.variant.sale!! / 100))}",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Black100
                     )
-                    Text(
-                        text = "Sale: ${cart.variant.sale!!}%",
-                        color = Black100,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(450)
-                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                        modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "Quantity:",
-                            color = Black100,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight(450)
+                            text = "Size ",
+                            color = Black50,
+                            fontWeight = FontWeight(450),
+                            fontSize = 12.sp,
                         )
-                        SpacerWidth(int = 12)
-                        IconButton(onClick = { viewModel.onReduce(cart.id!!) }, modifier = Modifier.size(24.dp)) {
-                            Icon(painter = painterResource(id = R.drawable.chevron_left_24), contentDescription = null, modifier = Modifier.fillMaxSize())
-                        }
-                        SpacerWidth(int = 10)
-                        Text(text = cart.quantity!!.toString(), color = Black100, fontWeight = FontWeight.Bold)
-                        SpacerWidth(int = 10)
-                        IconButton(onClick = { viewModel.onIncrease(cart.id!!) }, modifier = Modifier.size(24.dp)) {
-                            Icon(painter = painterResource(id = R.drawable.chevron_right_24), contentDescription = null, modifier = Modifier.fillMaxSize())
-                        }
+                        Text(
+                            text = "- ${cart.variant?.size!!.name}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
+                        )
+                        SpacerWidth(int = 8)
+                        Text(
+                            text = "Color ",
+                            color = Black50,
+                            fontWeight = FontWeight(450),
+                            fontSize = 12.sp,
+                        )
+                        Text(
+                            text = "- ${cart.variant.color!!.name}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight(450),
+                            color = Black100
+                        )
                     }
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         IconButton(
-                            onClick = {
-                                      viewModel.onDeleteCart(cart.id!!)
-                            },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(6.dp))
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.Red,
-                                    shape = RoundedCornerShape(6.dp)
-                                )
-                                .size(30.dp)
-
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "delete",
-                                tint = Color.Red,
-                                modifier = Modifier.size(16.dp)
+                            onClick = { viewModel.reduceQuantity(cart.id!!) },
+                            modifier = Modifier.size(24.dp),
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = Primary100,
+                                contentColor = Color.White
                             )
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.minus), contentDescription = null, modifier = Modifier.size(12.dp))
+                        }
+                        Text(text = cart.quantity.toString())
+                        IconButton(
+                            onClick = { viewModel.increaseQuantity(cart.id!!) },
+                            modifier = Modifier.size(24.dp),
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = Primary100,
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.addicon), contentDescription = null, modifier = Modifier.size(12.dp))
                         }
                     }
                 }

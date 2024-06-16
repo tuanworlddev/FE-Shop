@@ -229,7 +229,7 @@ fun LoggedInScreen(user: User?, accountViewModel: AccountViewModel, navControlle
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 CardLinkItem(title = "Address") {
-
+                    navController.navigate("address")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 CardLinkItem(title = "Wishlist") {

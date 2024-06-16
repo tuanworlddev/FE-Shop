@@ -13,11 +13,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dacs3.shop.ui.screens.account.AccountScreen
+import com.dacs3.shop.ui.screens.address.create.AddressCreateScreen
+import com.dacs3.shop.ui.screens.address.management.AddressManagementScreen
+import com.dacs3.shop.ui.screens.address.update.AddressUpdateScreen
 import com.dacs3.shop.ui.screens.cart.CartScreen
 import com.dacs3.shop.ui.screens.category.CategoryScreen
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsScreen
 import com.dacs3.shop.ui.screens.category.management.CategoryManageScreen
 import com.dacs3.shop.ui.screens.category.update.CategoryUpdateScreen
+import com.dacs3.shop.ui.screens.checkout.CheckoutScreen
 import com.dacs3.shop.ui.screens.home.HomeScreen
 import com.dacs3.shop.ui.screens.login.LoginScreen
 import com.dacs3.shop.ui.screens.notification.NotificationScreen
@@ -188,6 +192,41 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
                 bottomBarState.value = false
             }
             CategoryUpdateScreen(categoryId = backStackEntry.arguments?.getString("categoryId"), navController = navController)
+        }
+        composable(
+            route = "address"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            AddressManagementScreen(navController = navController)
+        }
+        composable(
+            route = "edit-address/{addressId}"
+        ) {backStackEntry ->
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            AddressUpdateScreen(
+                addressId = backStackEntry.arguments?.getString("addressId"),
+                navController = navController
+            )
+        }
+        composable(
+            route = "create-address"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            AddressCreateScreen(navController = navController)
+        }
+        composable(
+            route = "checkout"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            CheckoutScreen(navController = navController)
         }
     }
 }
