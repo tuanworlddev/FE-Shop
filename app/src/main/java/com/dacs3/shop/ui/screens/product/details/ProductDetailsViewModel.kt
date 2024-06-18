@@ -151,11 +151,21 @@ class ProductDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val currentUiState = _productDetailsUiState.value
-                if (currentUiState.currentVariant != null) {
-                    val cartRequest = CartRequest(variantId = currentUiState.currentVariant.id!!, quantity = currentUiState.quantity)
-                    val response = cartRepository.addCart(cartRequest)
-                    if (response.isSuccessful) {
-                        _productDetailsUiState.value = _productDetailsUiState.value.copy(isAddedToCart = true)
+                val currentVariant = currentUiState.currentVariant
+                if (currentVariant != null) {
+                    cartRepository.getCarts().apply {
+                        val carts = this.body()
+                        val existingCart = carts?.find { it.variant?.id == currentVariant.id }
+
+                        if (existingCart != null) {
+                            _productDetailsUiState.value = currentUiState.copy(isExists = true)
+                        } else {
+                            val cartRequest = CartRequest(variantId = currentVariant.id!!, quantity = currentUiState.quantity)
+                            val response = cartRepository.addCart(cartRequest)
+                            if (response.isSuccessful) {
+                                _productDetailsUiState.value = currentUiState.copy(isAddedToCart = true)
+                            }
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -170,5 +180,9 @@ class ProductDetailsViewModel @Inject constructor(
 
     fun onChangeIsAddedToCart(state: Boolean) {
         _productDetailsUiState.value = _productDetailsUiState.value.copy(isAddedToCart = state)
+    }
+
+    fun onChangeExists(state: Boolean) {
+        _productDetailsUiState.value = _productDetailsUiState.value.copy(isExists = state)
     }
 }

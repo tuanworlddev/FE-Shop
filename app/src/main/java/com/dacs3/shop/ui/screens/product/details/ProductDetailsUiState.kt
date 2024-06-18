@@ -12,5 +12,6 @@ data class ProductDetailsUiState(
     val comment: String = "",
     val errorMessage: String? = null,
     val isLoading: Boolean = false,
-    val isAddedToCart: Boolean = false
+    val isAddedToCart: Boolean = false,
+    val isExists: Boolean = false
 )

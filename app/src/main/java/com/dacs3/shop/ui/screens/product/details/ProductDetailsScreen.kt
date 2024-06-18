@@ -117,6 +117,15 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
         )
     }
 
+    if (uiState.isExists) {
+        AlertDialogNotification(
+            dialogTitle = "Notification",
+            dialogText = "Product already exists in cart",
+            onDismissRequest = {
+                productDetailsViewModel.onChangeExists(false)
+            }
+        )
+    }
 }
 
 @Composable

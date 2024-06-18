@@ -194,13 +194,13 @@ fun HomeContent(uiState: HomeUiState, navController: NavHostController) {
                 HomeCategory(uiState.categories, navController)
             }
             Section(
-                title = stringResource(id = R.string.top_selling),
+                title = "Sale",
                 onSeeAllClick = { navController.navigate("product-sale") }
             ) {
                 HomeTopSelling(uiState.saleProducts, navController)
             }
             Section(
-                title = stringResource(id = R.string.new_in),
+                title = "New",
                 onSeeAllClick = { navController.navigate("product-new") }
             ) {
                 HomeNewIn(uiState.newProducts, navController)
