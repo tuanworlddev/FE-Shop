@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -17,6 +18,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dacs3.shop.component.SpacerHeight
+import com.dacs3.shop.ui.theme.Black100
 import kotlinx.coroutines.delay
 
 @Composable
@@ -86,7 +90,17 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
                     singleLine = true,
                     modifier = Modifier
                         .weight(1f)
-                        .focusRequester(textFieldFocusRequester)
+                        .focusRequester(textFieldFocusRequester),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = Black100,
+                        unfocusedTextColor = Black100,
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    shape = RoundedCornerShape(100.dp)
                 )
             }
         }

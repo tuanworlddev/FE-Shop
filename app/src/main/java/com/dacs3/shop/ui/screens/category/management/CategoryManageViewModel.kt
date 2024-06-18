@@ -30,4 +30,21 @@ class CategoryManageViewModel @Inject constructor(private val categoryRepository
             }
         }
     }
+
+    fun onDeleteCategory(categoryId: Int) {
+        viewModelScope.launch {
+            try {
+                _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+                val response = categoryRepository.deleteCategory(categoryId)
+                if (response.isSuccessful) {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
+                    loadCategories()
+                } else {
+                    _uiState.value = _uiState.value.copy(error = "Failed to delete category", isLoading = false)
+                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(error = "Failed to delete category", isLoading = false)
+            }
+        }
+    }
 }

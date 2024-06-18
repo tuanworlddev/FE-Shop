@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.dacs3.shop.R
 import com.dacs3.shop.component.SpacerHeight
+import com.dacs3.shop.component.TopAppBarComponent
 import com.dacs3.shop.ui.screens.order.OrderCard
 import com.dacs3.shop.ui.theme.Black100
 import com.dacs3.shop.ui.theme.Black50
@@ -56,14 +57,7 @@ fun OrderMangerScreen(navController: NavHostController, viewModel: OrderManageVi
                 .verticalScroll(rememberScrollState())
         ) {
             SpacerHeight(int = 10)
-            Text(
-                text = stringResource(id = R.string.orders),
-                fontSize =  16.sp,
-                fontWeight = FontWeight(700),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                color = Black100, fontFamily = circularFont
-            )
+            TopAppBarComponent(navController = navController, title = "Orders")
             SpacerHeight(int = 15)
             Row(
                 modifier = Modifier

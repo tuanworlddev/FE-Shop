@@ -143,7 +143,7 @@ fun CartScreenContent(uiState: CartUiState, viewModel: CartViewModel, navControl
                             color = Black50
                         )
                         Text(
-                            text = "$${uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! }}",
+                            text = "$${viewModel.roundDouble(uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! })}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight(450),
                             color = Black100
@@ -200,7 +200,7 @@ fun CartScreenContent(uiState: CartUiState, viewModel: CartViewModel, navControl
                             color = Black50
                         )
                         Text(
-                            text = "$${uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! } + uiState.tax + uiState.shippingCost}",
+                            text = "$${viewModel.roundDouble(uiState.carts.sumOf { it.quantity!! * (1 - it.variant?.sale!! / 100) * it.variant.price!! } + uiState.tax + uiState.shippingCost)}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight(450),
                             color = Black100

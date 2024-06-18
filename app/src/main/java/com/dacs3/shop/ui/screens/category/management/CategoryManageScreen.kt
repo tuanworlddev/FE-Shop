@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
@@ -76,14 +78,53 @@ fun CategoryManageScreen(navController: NavHostController, viewModel: CategoryMa
                     .fillMaxSize()
                     .background(Color.White)
             ) {
-                SpacerHeight(int = 10)
-                TopAppBarComponent(navController = navController, title = "Category")
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = { navController.popBackStack() },
+                        modifier = Modifier.size(40.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Light2,
+                            contentColor = Black100
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "",
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                    Text(
+                        text = "Category Management",
+                        fontWeight = FontWeight(700),
+                        fontSize = 16.sp,
+                        color = Black100
+                    )
+                    IconButton(
+                        onClick = { navController.navigate("create-category") },
+                        modifier = Modifier.size(40.dp),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Light2,
+                            contentColor = Black100
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "create",
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
                 SpacerHeight(int = 15)
 
                 if (uiState.categories.isNotEmpty()) {
                     LazyColumn {
                         items(uiState.categories) { category ->
-                            CategoryCard(category = category, navController)
+                            CategoryCard(category = category, navController, onDelete = { viewModel.onDeleteCategory(it) })
                             SpacerHeight(int = 15)
                         }
                     }
@@ -96,7 +137,7 @@ fun CategoryManageScreen(navController: NavHostController, viewModel: CategoryMa
 }
 
 @Composable
-fun CategoryCard(category: Category, navController: NavHostController) {
+fun CategoryCard(category: Category, navController: NavHostController, onDelete: (categoryId: Int) -> Unit) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -145,6 +186,7 @@ fun CategoryCard(category: Category, navController: NavHostController) {
                 Spacer(modifier = Modifier.width(5.dp))
                 IconButton(
                     onClick = {
+                              onDelete(category.id!!)
                     },
                     modifier = Modifier
                         .clip(RoundedCornerShape(6.dp))

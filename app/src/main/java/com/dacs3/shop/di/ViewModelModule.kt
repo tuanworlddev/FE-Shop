@@ -20,6 +20,7 @@ import com.dacs3.shop.ui.screens.address.management.AddressManageViewModel
 import com.dacs3.shop.ui.screens.address.update.AddressUpdateViewModel
 import com.dacs3.shop.ui.screens.cart.CartViewModel
 import com.dacs3.shop.ui.screens.category.CategoryViewModel
+import com.dacs3.shop.ui.screens.category.create.CreateCategoryViewModel
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsViewModel
 import com.dacs3.shop.ui.screens.category.management.CategoryManageViewModel
 import com.dacs3.shop.ui.screens.category.update.CategoryUpdateViewModel
@@ -233,6 +234,14 @@ object ViewModelModule {
         orderRepository: OrderRepository
     ) : OrderManageViewModel {
         return OrderManageViewModel(orderRepository)
+    }
+
+    @Provides
+    fun provideCreateCategoryViewModel(
+        categoryRepository: CategoryRepository,
+        uploadImageRepository: UploadImageRepository
+    ) : CreateCategoryViewModel {
+        return CreateCategoryViewModel(categoryRepository, uploadImageRepository)
     }
 
 }

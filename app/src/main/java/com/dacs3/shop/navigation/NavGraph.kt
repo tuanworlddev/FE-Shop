@@ -18,6 +18,7 @@ import com.dacs3.shop.ui.screens.address.management.AddressManagementScreen
 import com.dacs3.shop.ui.screens.address.update.AddressUpdateScreen
 import com.dacs3.shop.ui.screens.cart.CartScreen
 import com.dacs3.shop.ui.screens.category.CategoryScreen
+import com.dacs3.shop.ui.screens.category.create.CreateCategoryScreen
 import com.dacs3.shop.ui.screens.category.details.CategoryDetailsScreen
 import com.dacs3.shop.ui.screens.category.management.CategoryManageScreen
 import com.dacs3.shop.ui.screens.category.update.CategoryUpdateScreen
@@ -269,6 +270,14 @@ fun NavGraphContainer(paddingValues: PaddingValues, navController: NavHostContro
                 bottomBarState.value = false
             }
             OrderMangerScreen(navController = navController)
+        }
+        composable(
+            route = "create-category"
+        ) {
+            LaunchedEffect(Unit) {
+                bottomBarState.value = false
+            }
+            CreateCategoryScreen(navController = navController)
         }
     }
 }
