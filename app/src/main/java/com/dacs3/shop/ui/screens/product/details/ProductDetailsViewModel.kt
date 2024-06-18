@@ -164,6 +164,8 @@ class ProductDetailsViewModel @Inject constructor(
                             val response = cartRepository.addCart(cartRequest)
                             if (response.isSuccessful) {
                                 _productDetailsUiState.value = currentUiState.copy(isAddedToCart = true)
+                            } else {
+                                _productDetailsUiState.value = currentUiState.copy(errorMessage = response.errorBody().toString())
                             }
                         }
                     }

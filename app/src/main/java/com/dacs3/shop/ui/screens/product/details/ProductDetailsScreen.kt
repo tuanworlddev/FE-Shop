@@ -103,7 +103,6 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
 
     when {
         uiState.isLoading -> LoadingScreen()
-        !uiState.errorMessage.isNullOrEmpty() -> ErrorScreen(message = uiState.errorMessage!!)
         uiState.product != null -> ProductDetailsContent(uiState, productId!!.toInt(), navController, productDetailsViewModel)
     }
 
@@ -121,6 +120,16 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
         AlertDialogNotification(
             dialogTitle = "Notification",
             dialogText = "Product already exists in cart",
+            onDismissRequest = {
+                productDetailsViewModel.onChangeExists(false)
+            }
+        )
+    }
+
+    if (uiState.errorMessage.isNullOrEmpty()) {
+        AlertDialogNotification(
+            dialogTitle = "Error",
+            dialogText = uiState.errorMessage!!,
             onDismissRequest = {
                 productDetailsViewModel.onChangeExists(false)
             }
