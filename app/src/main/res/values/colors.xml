@@ -20,4 +20,6 @@
     <color name="success_background">#d1e7dd</color>
     <color name="success_border">#a3cfbb</color>
     <color name="success_link">#0a3622</color>
+    <color name="success_btn">#28a745</color>
+    <color name="danger_btn">#dc3545</color>
 </resources>

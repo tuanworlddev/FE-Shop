@@ -175,18 +175,32 @@ fun OrderDetailsScreen(
                 if (uiState.orderDetails?.status == OrderStatus.Pending) {
                     SpacerHeight(int = 25)
                     Button(
-                        onClick = { viewModel.onCancelOrder() },
+                        onClick = { viewModel.updateOrderStatus(OrderStatus.Cancelled) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.red_container),
-                            contentColor = colorResource(id = R.color.red_text)
+                            containerColor = colorResource(id = R.color.danger_btn),
+                            contentColor = Color.White
                         ),
-                        border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.red_border)),
+                        border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.danger_btn)),
                         modifier = Modifier.align(Alignment.End)
                     ) {
                         Text(text = "Cancel Order")
                     }
                     if (uiState.isCancelled) {
                         navController.navigate("order")
+                    }
+                    SpacerHeight(int = 15)
+                } else if (uiState.orderDetails?.status == OrderStatus.Shipped) {
+                    SpacerHeight(int = 25)
+                    Button(
+                        onClick = { viewModel.updateOrderStatus(OrderStatus.Delivered) },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.success_btn),
+                            contentColor = Color.White
+                        ),
+                        border = BorderStroke(width = 1.dp, color = colorResource(id = R.color.success_btn)),
+                        modifier = Modifier.align(Alignment.End)
+                    ) {
+                        Text(text = "Delivered Order")
                     }
                     SpacerHeight(int = 15)
                 }

@@ -126,7 +126,7 @@ fun ProductDetailsScreen(productId: String?, navController: NavHostController, p
         )
     }
 
-    if (uiState.errorMessage.isNullOrEmpty()) {
+    if (!uiState.errorMessage.isNullOrEmpty()) {
         AlertDialogNotification(
             dialogTitle = "Error",
             dialogText = uiState.errorMessage!!,

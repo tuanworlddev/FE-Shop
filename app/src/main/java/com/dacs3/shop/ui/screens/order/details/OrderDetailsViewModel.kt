@@ -36,12 +36,12 @@ class OrderDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isViewAll = !_uiState.value.isViewAll)
     }
 
-    fun onCancelOrder() {
+    fun updateOrderStatus(orderStatus: OrderStatus) {
         viewModelScope.launch {
             try {
                 val id = _uiState.value.orderDetails?.id
                 if (id != null) {
-                    val response = orderRepository.updateStatus(id, UpdateStateOrderDto(OrderStatus.Cancelled.name))
+                    val response = orderRepository.updateStatus(id, UpdateStateOrderDto(orderStatus.name))
                     if (response.isSuccessful) {
                         _uiState.value = _uiState.value.copy(isCancelled = true)
                     }

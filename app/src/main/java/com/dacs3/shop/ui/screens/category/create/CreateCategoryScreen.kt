@@ -93,7 +93,7 @@ fun CreateCategoryScreen(
                 .background(Color.White)
         ) {
             SpacerHeight(int = 10)
-            TopAppBarComponent(navController = navController, title = "Update")
+            TopAppBarComponent(navController = navController, title = "Create Category")
             SpacerHeight(int = 15)
 
             if (!uiState.errorMessage.isNullOrEmpty()) {
